@@ -4,12 +4,17 @@ import org.eclipse.jface.wizard.Wizard;
 
 import es.academia.modelo.Alumno;
 import es.academia.modelo.Curso;
+import es.academia.negocio.NegocioException;
+import es.academia.utils.GestorErrores;
+import es.academia.utils.IConstantes;
 
-public class NuevaMatriculaWizard extends Wizard {
+public class NuevaMatriculaWizard extends Wizard  implements IConstantes{
 	
 	private Curso curso;
 	private Alumno alumno;
 	
+	protected SeleccionarCursoPage sp;
+	protected NuevaMatriculaPage mp;
 
 	public NuevaMatriculaWizard() {
 		setWindowTitle("Nueva Matrícula");
@@ -17,17 +22,34 @@ public class NuevaMatriculaWizard extends Wizard {
 
 	@Override
 	public void addPages() {
-		SeleccionarCursoPage sp = new SeleccionarCursoPage();
+		sp = new SeleccionarCursoPage();
 		addPage(sp);
-		NuevaMatriculaPage mp = new NuevaMatriculaPage();
+		mp = new NuevaMatriculaPage();
 		mp.setAlumno(alumno);
 		addPage(mp);
 		
 	}
 
 	@Override
+	public boolean canFinish() {
+
+//		GestorErrores.mensajeTexto("canFinish", NIVEL_ERROR);
+		return mp.isPageComplete();
+	}
+	
 	public boolean performFinish() {
-		return false;
+
+//		GestorErrores.mensajeTexto("performFinish", NIVEL_ERROR);
+		try {
+			mp.matAl.matricular(mp.matricula);
+			return true;
+		} catch (NegocioException e) {
+			// TODO Auto-generated catch block
+			GestorErrores.mensajeTexto("Error matriculando al alumno: " + e.getMessage(), NIVEL_ERROR);
+			e.printStackTrace();
+			return false;
+		}
+		
 	}
 	
 	public void setCurso(Curso curso){
@@ -45,6 +67,4 @@ public class NuevaMatriculaWizard extends Wizard {
 	public void setAlumno(Alumno alumno) {
 		this.alumno = alumno;
 	}
-	
-
 }

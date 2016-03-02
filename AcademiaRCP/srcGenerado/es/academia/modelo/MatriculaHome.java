@@ -3,12 +3,18 @@ package es.academia.modelo;
 // Generated 21-jul-2014 23:03:03 by Hibernate Tools 3.4.0.CR1
 
 import java.util.List;
+
 import javax.naming.InitialContext;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Criteria;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * Home object for domain model class Matricula.
@@ -21,24 +27,22 @@ public class MatriculaHome {
 
 	private final SessionFactory sessionFactory = getSessionFactory();
 
-	protected SessionFactory getSessionFactory() {
-		try {
-			return (SessionFactory) new InitialContext()
-					.lookup("SessionFactory");
-		} catch (Exception e) {
-			log.error("Could not locate SessionFactory in JNDI", e);
-			throw new IllegalStateException(
-					"Could not locate SessionFactory in JNDI");
-		}
-	}
+    protected SessionFactory getSessionFactory() {
+    	return HibernateUtil.getSessionFactory();
+}
 
 	public void persist(Matricula transientInstance) {
 		log.debug("persisting Matricula instance");
+		
+        Session sesion = getSessionFactory().getCurrentSession();
+        sesion.beginTransaction();
 		try {
-			sessionFactory.getCurrentSession().persist(transientInstance);
+			sesion.saveOrUpdate(transientInstance);
 			log.debug("persist successful");
+			sesion.getTransaction().commit();
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);
+			sesion.getTransaction().rollback();
 			throw re;
 		}
 	}
@@ -46,7 +50,7 @@ public class MatriculaHome {
 	public void attachDirty(Matricula instance) {
 		log.debug("attaching dirty Matricula instance");
 		try {
-			sessionFactory.getCurrentSession().saveOrUpdate(instance);
+			getSessionFactory().getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -57,7 +61,7 @@ public class MatriculaHome {
 	public void attachClean(Matricula instance) {
 		log.debug("attaching clean Matricula instance");
 		try {
-			sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
+			getSessionFactory().getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -68,7 +72,7 @@ public class MatriculaHome {
 	public void delete(Matricula persistentInstance) {
 		log.debug("deleting Matricula instance");
 		try {
-			sessionFactory.getCurrentSession().delete(persistentInstance);
+			getSessionFactory().getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -79,7 +83,7 @@ public class MatriculaHome {
 	public Matricula merge(Matricula detachedInstance) {
 		log.debug("merging Matricula instance");
 		try {
-			Matricula result = (Matricula) sessionFactory.getCurrentSession()
+			Matricula result = (Matricula) getSessionFactory().getCurrentSession()
 					.merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
@@ -91,33 +95,69 @@ public class MatriculaHome {
 
 	public Matricula findById(java.lang.Integer id) {
 		log.debug("getting Matricula instance with id: " + id);
+        Session sesion = getSessionFactory().getCurrentSession();
+        sesion.beginTransaction();
 		try {
-			Matricula instance = (Matricula) sessionFactory.getCurrentSession()
-					.get("es.academia.modelo.Matricula", id);
+			Matricula instance = (Matricula) sesion.get("es.academia.modelo.Matricula", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
 				log.debug("get successful, instance found");
 			}
+			sesion.getTransaction().commit();
 			return instance;
 		} catch (RuntimeException re) {
-			log.error("get failed", re);
-			throw re;
-		}
+	            log.error("get failed", re);
+	        	sesion.getTransaction().rollback();
+	            throw re;
+	        }
 	}
 
 	public List findByExample(Matricula instance) {
-		log.debug("finding Matricula instance by example");
-		try {
-			List results = sessionFactory.getCurrentSession()
-					.createCriteria("es.academia.modelo.Matricula")
-					.add(Example.create(instance)).list();
-			log.debug("find by example successful, result size: "
-					+ results.size());
-			return results;
-		} catch (RuntimeException re) {
-			log.error("find by example failed", re);
-			throw re;
-		}
+        log.debug("finding Alumno instance by example");
+        Session sesion = getSessionFactory().getCurrentSession();
+        sesion.beginTransaction();
+        try {
+        	Criteria crit =sesion.createCriteria("es.academia.modelo.Alumno");
+        	if (instance.getCurso() != null)
+        		crit.add(Restrictions.eq( "idCurso", instance.getCurso() ));
+        	if (instance.getAlumno() != null)
+        		crit.add(Restrictions.like("idAlumno", instance.getAlumno()));
+        	List<Matricula> results =crit.list();
+        	log.debug("find by example successful, result size: " + results.size());
+            return results;
+        }
+        catch (RuntimeException re) {
+            log.error("find by example failed", re);
+            throw re;
+        }
+        finally{
+        	sesion.getTransaction().commit();
+        }
 	}
+	
+    public List<Matricula> listarTodos(){
+
+        Session sesion = getSessionFactory().getCurrentSession();
+        sesion.beginTransaction();
+
+        List<Matricula> result=(List<Matricula>)sesion.createQuery("from Matricula").list();
+
+        sesion.getTransaction().commit();
+        return result;
+    }
+    
+    public List<Recibo> getRecibos(Matricula matricula){
+    	Session sesion = getSessionFactory().getCurrentSession();
+        sesion.beginTransaction();
+    	Query query = sesion.createQuery("select r from Recibo as r where r.idMatricula = :matricula");
+    	query.setParameter("matricula", matricula);
+    	
+    	List<Recibo> resultado = (List<Recibo>)query.list();
+        sesion.getTransaction().commit();
+        
+        return resultado;
+    }
+    
+	
 }

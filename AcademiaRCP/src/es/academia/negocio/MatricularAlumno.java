@@ -24,12 +24,12 @@ import es.academia.utils.ACALog;
 import es.academia.utils.IConstantes;
 
 public class MatricularAlumno {
-	private Matricula matricula;
+//	private Matricula matricula;
 	private static final Logger log = ACALog.getLogger(MatricularAlumno.class);
 	
-	public MatricularAlumno(Matricula matricula){
+	public MatricularAlumno(){
 	
-		this.matricula = matricula;
+//		this.matricula = matricula;
 		
 	}
 	
@@ -71,7 +71,7 @@ public class MatricularAlumno {
 	}
 	
 	
-	public void matricular()  throws NegocioException{
+	public void matricular(Matricula matricula)  throws NegocioException{
 
 		// Validamos que no sean null 
 		if (matricula == null)
@@ -80,23 +80,23 @@ public class MatricularAlumno {
 		
 		// Validaciones del recibo.
 		
-		validarMatricula();
+		validarMatricula(matricula);
 
 		// Insertar en la tabla Matricula
 		MatriculaHome mh = new MatriculaHome();
 		mh.persist(matricula);
 		
 		// Generar los recibos.
-		generarRecibos();
+		generarRecibos(matricula);
 		
 	}
 	
-	private void validarMatricula()  throws NegocioException{
+	private void validarMatricula(Matricula matricula)  throws NegocioException{
 		// TODO Auto-generated method stub
 		
 	}
 
-	private void generarRecibos() throws NegocioException{
+	private void generarRecibos(Matricula matricula) throws NegocioException{
 	
 		Calendar desde = GregorianCalendar.getInstance();
 		Calendar hasta = GregorianCalendar.getInstance();
@@ -111,11 +111,31 @@ public class MatricularAlumno {
 			Recibo rec = new Recibo();
 			rec.setIdMatricula(matricula.getIdMatricula());
 			rec.setFGeneracion(null);
-			rec.setImpMes(matricula.getImpMes());
-			rec.setNumHoras(matricula.getHorasDefecto());
-			rec.setPrecHora(matricula.getImpHora());
-			rec.setImpHoras(new BigDecimal(rec.getNumHoras().doubleValue()*rec.getImpHoras().doubleValue()));
-			rec.setDescuento(matricula.getDescuento());
+			if (matricula.getImpMes() == null)
+				rec.setImpMes(new BigDecimal(0));
+			else 
+				rec.setImpMes(matricula.getImpMes());
+
+			if (matricula.getHorasDefecto() == null)
+				rec.setNumHoras(new Integer(0));
+			else 
+				rec.setNumHoras(matricula.getHorasDefecto());
+			
+			if (matricula.getImpHora() == null)
+				rec.setPrecHora(new BigDecimal(0));
+			else 
+				rec.setPrecHora(matricula.getImpHora());
+
+			if (rec.getNumHoras()== null ||rec.getImpHoras()==null)
+				rec.setImpHoras(new BigDecimal(0));
+			else
+				rec.setImpHoras(new BigDecimal(rec.getNumHoras().doubleValue()*rec.getImpHoras().doubleValue()));
+			
+			if (matricula.getDescuento() ==null)
+				rec.setDescuento(new BigDecimal(0));
+			else 
+				rec.setDescuento(matricula.getDescuento());
+			
 			double importeTotal=0.0;
 			double importeMes= rec.getImpMes().doubleValue();
 			double importeHoras = rec.getImpHoras().doubleValue();
@@ -165,6 +185,7 @@ public class MatricularAlumno {
 				cl.add(Calendar.MONTH, 1);
 		}
 		}catch (Exception e){
+			e.printStackTrace();
 			throw new NegocioException(NegocioException.ERROR_CREANDO_MATRICULA,
 					   "Error al crear la matricula. Generando recibos por defecto.\n" +e.getMessage()
 					   ,"MATRICULAR_ALUMNO");

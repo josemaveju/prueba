@@ -1,5 +1,6 @@
 package es.academia.dialogos;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -21,8 +22,14 @@ import es.academia.modelo.Alumno;
 import es.academia.modelo.Curso;
 import es.academia.negocio.MatricularAlumno;
 import es.academia.negocio.NegocioException;
+import es.academia.utils.ACALog;
+import es.academia.utils.GestorErrores;
+import es.academia.utils.IConstantes;
 
-public class NuevaMatriculaPage extends WizardPage {
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
+
+public class NuevaMatriculaPage extends WizardPage implements IConstantes{
 	private DataBindingContext m_bindingContext;
 	private Text txNombreAlumno;
 	private Text txNifAlumno;
@@ -35,7 +42,7 @@ public class NuevaMatriculaPage extends WizardPage {
 	/**
 	 * @wbp.nonvisual location=92,469
 	 */
-	private Matricula matricula;
+	protected Matricula matricula;
 	private Label lblFechaDesde;
 	private Label lblFechaHasta;
 	private DateTime txFechaInicio;
@@ -50,7 +57,9 @@ public class NuevaMatriculaPage extends WizardPage {
 	private Curso curso;
 	private Label lblNombre;
 	
-	private MatricularAlumno matAl;
+	protected MatricularAlumno matAl;
+	
+	private static final Logger log = ACALog.getLogger(NuevaMatriculaPage.class);	
 
 	/**
 	 * Create the wizard.
@@ -79,7 +88,7 @@ public class NuevaMatriculaPage extends WizardPage {
 	}
 	
 	protected void setMatricula() throws NegocioException{
-		matAl = new MatricularAlumno(new Matricula());
+		matAl = new MatricularAlumno();
 		matricula = matAl.obtenerDatosDefecto(getCurso().getIdCurso(),alumno.getIdAlumno());
 		initDataBindings();
 		
@@ -167,6 +176,12 @@ public class NuevaMatriculaPage extends WizardPage {
 		lblImporteHora.setBounds(160, 32, 105, 15);
 		
 		txImpHora = new Text(grpImportes, SWT.BORDER);
+		txImpHora.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				getWizard().getContainer().updateButtons();
+			}
+		});
 		txImpHora.setBounds(160, 49, 132, 20);
 		
 		Label lblHorasAlMes = new Label(grpImportes, SWT.NONE);
@@ -174,6 +189,13 @@ public class NuevaMatriculaPage extends WizardPage {
 		lblHorasAlMes.setBounds(331, 32, 105, 15);
 		
 		txHorasMes = new Text(grpImportes, SWT.BORDER);
+		txHorasMes.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				getWizard().getContainer().updateButtons();
+			}
+		});
+		
 		txHorasMes.setBounds(331, 49, 115, 20);
 		
 		Label lblImporteFijoAl = new Label(grpImportes, SWT.NONE);
@@ -181,6 +203,13 @@ public class NuevaMatriculaPage extends WizardPage {
 		lblImporteFijoAl.setBounds(160, 87, 105, 15);
 		
 		txImpMes = new Text(grpImportes, SWT.BORDER);
+		txImpMes.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				getWizard().getContainer().updateButtons();
+			}
+		});
+		
 		txImpMes.setBounds(160, 104, 132, 20);
 		
 		Label lblDescuento = new Label(grpImportes, SWT.NONE);
@@ -188,6 +217,13 @@ public class NuevaMatriculaPage extends WizardPage {
 		lblDescuento.setBounds(331, 87, 105, 15);
 		
 		txDescuento = new Text(grpImportes, SWT.BORDER);
+		txDescuento.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				getWizard().getContainer().updateButtons();
+			}
+		});
+		
 		txDescuento.setBounds(331, 104, 115, 20);
 		m_bindingContext = initDataBindings();
 	}
@@ -236,4 +272,35 @@ public class NuevaMatriculaPage extends WizardPage {
 		//
 		return bindingContext;
 	}
+
+	
+	public boolean canFlipToNextPage (){
+
+	   	 return false;
+	}
+	
+	public boolean canFinish(){
+		return datosCorrectos();
+	}
+
+	private boolean datosCorrectos(){
+//		GestorErrores.mensajeTexto("Entro en datosCorrectos", NIVEL_ERROR);
+		log.debug("Entrando en datosCorrectos");
+		log.debug("Datos:");
+		log.debug("txImpHora: "+ txImpHora.getText());
+		log.debug("txHorasMes: "+ txHorasMes.getText());
+
+		if ( (txImpHora.getText()).equals("") && !(txHorasMes.getText()).equals("") ){
+			return false;
+		}
+		if ( !(txImpHora.getText()).equals("") && (txHorasMes.getText()).equals("") )
+			return false;
+		
+		if ((txImpHora.getText()).equals("") && (txHorasMes.getText()).equals(""))
+			return false;
+		
+		return true;		
+
+	}
+	
 }

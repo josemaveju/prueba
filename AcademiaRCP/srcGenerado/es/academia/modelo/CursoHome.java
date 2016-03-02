@@ -97,7 +97,7 @@ public class CursoHome {
 	public Curso findById(java.lang.Integer id) {
         log.debug("getting Curso instance with id: " + id);
         Session sesion = getSessionFactory().getCurrentSession();
- //       sesion.beginTransaction();
+        sesion.beginTransaction();
        try {
     	   Curso instance = (Curso) sesion
                     .get("es.academia.modelo.Curso", id);
@@ -107,15 +107,14 @@ public class CursoHome {
             else {
                 log.debug("get successful, instance found");
             }
+            sesion.getTransaction().commit();
             return instance;
         }
         catch (RuntimeException re) {
             log.error("get failed", re);
+            sesion.getTransaction().rollback();
             throw re;
         }
-       finally{
-//       	sesion.getTransaction().commit();
-       }
 	}
 
 	public List findByExample(Curso instance) {

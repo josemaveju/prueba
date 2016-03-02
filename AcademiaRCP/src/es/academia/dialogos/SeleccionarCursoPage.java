@@ -3,6 +3,7 @@ package es.academia.dialogos;
 import org.apache.log4j.Logger;
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.list.WritableList;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -30,6 +31,7 @@ public class SeleccionarCursoPage extends WizardPage {
 	private  Curso curso;
 	private TableViewer tableViewer;
 	private CursoHome cursoHome = new CursoHome();
+	private boolean enableNext;
 
 	/**
 	 * Create the wizard.
@@ -127,15 +129,27 @@ public class SeleccionarCursoPage extends WizardPage {
 
 	public boolean canFlipToNextPage (){
 
-		   if (table.getSelectionIndex()!= -1)
-			 return true;
-		   else
+		   if (table.getSelectionIndex()!= -1){
+			   enableNext=true; 
+			   return true;
+		   }
+		   else{
+			  enableNext=false;
 		   	 return false;
+		   }
 		}
 	
 	public boolean canFinish(){
 		return false;
 	}
 
+	public boolean isPageComplete() {
+		IWizardPage[] pages = getWizard().getPages();
+//		        hard coding for this case . But this is bad..
+		if(enableNext && pages[1].isPageComplete()) {
+		return true;
+		}
+		return false;
+		}
 
 }
