@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 21-jul-2014 23:03:02 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="es.academia.modelo.Alumno" table="alumno" catalog="academia">
+        <id name="idAlumno" type="java.lang.Integer">
+            <column name="idALUMNO" />
+            <generator class="identity" />
+        </id>
+        <property name="conocimiento" type="int">
+            <column name="CONOCIMIENTO" not-null="true" />
+        </property>
+        <property name="nombre" type="string">
+            <column name="Nombre" length="40" />
+        </property>
+        <property name="apellidos" type="string">
+            <column name="Apellidos" length="70" />
+        </property>
+        <property name="nif" type="string">
+            <column name="NIF" length="12" />
+        </property>
+        <property name="FNacimiento" type="date">
+            <column name="F_Nacimiento" length="10" />
+        </property>
+        <property name="direccion" type="string">
+            <column name="Direccion" length="75" />
+        </property>
+        <property name="poblacion" type="string">
+            <column name="Poblacion" length="50" />
+        </property>
+        <property name="provincia" type="string">
+            <column name="Provincia" length="30" />
+        </property>
+        <property name="cp" type="string">
+            <column name="CP" />
+        </property>
+        <property name="telFijo" type="string">
+            <column name="telFijo" />
+        </property>
+        <property name="telMovil" type="string">
+            <column name="TelMovil" />
+        </property>
+        <property name="telMovil2" type="string">
+            <column name="TelMovil2" />
+        </property>
+        <property name="EMail" type="string">
+            <column name="e_mail" length="100" />
+        </property>
+        <property name="nombreTutor" type="string">
+            <column name="nombreTutor" length="50" />
+        </property>
+        <property name="apellidosTutor" type="string">
+            <column name="apellidosTutor" length="75" />
+        </property>
+        <property name="niftutor" type="string">
+            <column name="NIFTutor" length="12" />
+        </property>
+        <property name="FAlta" type="date">
+            <column name="F_Alta" length="10" />
+        </property>
+        <property name="FBaja" type="date">
+            <column name="F_Baja" length="10" />
+        </property>
+        <property name="baja" type="string">
+            <column name="Baja" length="1" />
+        </property>
+        <property name="indExportado" type="string">
+            <column name="Ind_exportado" length="1" />
+        </property>
+        <property name="notas" type="string">
+            <column name="Notas" length="2048" />
+        </property>
+        
+         <set name="matriculas" cascade="delete-orphan" fetch="join"> 
+    		<key column="idAlumno" /> 
+    		<one-to-many class="es.academia.modelo.Matricula" /> 
+		</set>
+        
+    </class>
+</hibernate-mapping>

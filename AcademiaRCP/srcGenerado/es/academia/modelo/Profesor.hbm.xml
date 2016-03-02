@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 21-jul-2014 23:03:02 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="es.academia.modelo.Profesor" table="profesor" catalog="academia">
+        <id name="idProfesor" type="java.lang.Integer">
+            <column name="idPROFESOR" />
+            <generator class="identity" />
+        </id>
+        <property name="nombre" type="string">
+            <column name="Nombre" length="75" />
+        </property>
+        <property name="apellidos" type="string">
+            <column name="Apellidos" length="70" />
+        </property>
+        <property name="nif" type="string">
+            <column name="NIF" length="12" />
+        </property>
+        <property name="FNacimiento" type="date">
+            <column name="F_Nacimiento" length="10" />
+        </property>
+        <property name="direccion" type="string">
+            <column name="Direccion" length="75" />
+        </property>
+        <property name="provincia" type="string">
+            <column name="Provincia" length="30" />
+        </property>
+        <property name="poblacion" type="string">
+            <column name="Poblacion" length="75" />
+        </property>
+        <property name="cp" type="java.lang.Integer">
+            <column name="CP" />
+        </property>
+        <property name="telFijo" type="string">
+            <column name="telFijo" length="9" />
+        </property>
+        <property name="telMovil" type="string">
+            <column name="telMovil" length="9" />
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="150" />
+        </property>
+        <property name="titulacion" type="string">
+            <column name="Titulacion" length="50" />
+        </property>
+        <property name="numCuenta" type="string">
+            <column name="NumCuenta" length="22" />
+        </property>
+        <property name="numCtaContable" type="string">
+            <column name="numCtaContable" length="9" />
+        </property>
+        <property name="impFijo" type="big_decimal">
+            <column name="ImpFijo" precision="12" />
+        </property>
+        <property name="porcRecibo" type="big_decimal">
+            <column name="PorcRecibo" precision="5" />
+        </property>
+        <property name="FAlta" type="date">
+            <column name="F_Alta" length="10" />
+        </property>
+        <property name="FBaja" type="date">
+            <column name="F_Baja" length="10" />
+        </property>
+        <property name="estado" type="string">
+            <column name="Estado" length="1" />
+        </property>
+    </class>
+</hibernate-mapping>

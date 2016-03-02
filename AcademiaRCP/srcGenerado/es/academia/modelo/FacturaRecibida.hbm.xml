@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 21-jul-2014 23:03:02 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="es.academia.modelo.FacturaRecibida" table="factura_recibida" catalog="academia">
+        <id name="idFactura" type="java.lang.Integer">
+            <column name="IdFactura" />
+            <generator class="identity" />
+        </id>
+        <property name="descFactura" type="string">
+            <column name="DescFactura" length="100" />
+        </property>
+        <property name="FFactura" type="date">
+            <column name="F_Factura" length="10" not-null="true" />
+        </property>
+        <property name="emisor" type="string">
+            <column name="Emisor" length="100" />
+        </property>
+        <property name="importe" type="big_decimal">
+            <column name="Importe" precision="12" not-null="true" />
+        </property>
+        <property name="idTrContab" type="int">
+            <column name="idTrContab" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

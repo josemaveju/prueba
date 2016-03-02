@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 21-jul-2014 23:03:02 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="es.academia.modelo.Matricula" table="matricula" catalog="academia">
+        <id name="idMatricula" type="java.lang.Integer">
+            <column name="IdMatricula" />
+            <generator class="identity" />
+        </id>
+ <!--        <property name="idAlumno" type="int">
+            <column name="IdAlumno" not-null="true" />
+        </property>
+        <property name="idCurso" type="int">
+            <column name="IdCurso" not-null="true" />
+        </property>
+ -->        
+        <property name="FDesde" type="date">
+            <column name="F_Desde" length="10" />
+        </property>
+        <property name="FHasta" type="date">
+            <column name="F_Hasta" length="10" />
+        </property>
+        <property name="fecUltReciboGen" type="date">
+            <column name="FecUltReciboGen" length="10" />
+        </property>
+        <property name="pmatricula" type="big_decimal">
+            <column name="pMatricula" precision="13" />
+        </property>
+        <property name="impMes" type="big_decimal">
+            <column name="impMes" precision="13" />
+        </property>
+        <property name="impHora" type="big_decimal">
+            <column name="ImpHora" precision="13" />
+        </property>
+        <property name="horasDefecto" type="java.lang.Integer">
+            <column name="horasDefecto" />
+        </property>
+        <property name="descuento" type="big_decimal">
+            <column name="Descuento" precision="5" />
+        </property>
+        <many-to-one name="alumno" column="IdAlumno" lazy="false" />
+        <many-to-one name="curso" column="IdCurso"  lazy="false"/>
+        
+         <set name="recibos" cascade="delete-orphan" fetch="join"> 
+    		<key column="idRecibo" /> 
+    		<one-to-many class="es.academia.modelo.Recibo" /> 
+		</set>
+        
+    </class>
+</hibernate-mapping>

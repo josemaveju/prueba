@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 21-jul-2014 23:03:02 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="es.academia.modelo.Trcontab" table="trcontab" catalog="academia">
+        <id name="idTrContab" type="java.lang.Integer">
+            <column name="idTrContab" />
+            <generator class="identity" />
+        </id>
+        <property name="cuentaContable" type="string">
+            <column name="CuentaContable" length="18" not-null="true" />
+        </property>
+        <property name="desCuenta" type="string">
+            <column name="DesCuenta" length="50" />
+        </property>
+    </class>
+</hibernate-mapping>

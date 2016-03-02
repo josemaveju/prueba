@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 21-jul-2014 23:03:02 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="es.academia.modelo.DatosAcademia" table="datos_academia" catalog="academia">
+        <id name="idDatosAcademia" type="java.lang.Integer">
+            <column name="idDATOS_ACADEMIA" />
+            <generator class="identity" />
+        </id>
+        <property name="nombreAcademia" type="string">
+            <column name="NOMBRE_ACADEMIA" length="100" />
+        </property>
+        <property name="denomFiscal" type="string">
+            <column name="DENOM_FISCAL" length="100" />
+        </property>
+        <property name="nif" type="string">
+            <column name="NIF" length="12" />
+        </property>
+        <property name="direccion" type="string">
+            <column name="Direccion" length="100" />
+        </property>
+        <property name="poblacion" type="string">
+            <column name="Poblacion" length="100" />
+        </property>
+        <property name="numCuenta" type="string">
+            <column name="NumCuenta" length="22" />
+        </property>
+    </class>
+</hibernate-mapping>

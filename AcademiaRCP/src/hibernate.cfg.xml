@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+                                         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+ <session-factory>
+  <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+  <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+  <property name="hibernate.connection.url">jdbc:mysql://127.0.0.1:3306</property>
+  <property name="hibernate.connection.username">root</property>
+  <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+  <property name="hibernate.search.autoregister_listeners">false</property>
+  <property name="hibernate.connection.password"></property>
+  <property name="hibernate.current_session_context_class">thread</property>
+  <property name="hibernate.show_sql">true</property>
+  <property name="hibernate.format_sql">true</property>
+  <mapping resource="es/academia/modelo/Serierecibo.hbm.xml"/>
+  <mapping resource="es/academia/modelo/Curso.hbm.xml"/>
+  <mapping resource="es/academia/modelo/FacturaRecibida.hbm.xml"/>
+  <mapping resource="es/academia/modelo/Conocimiento.hbm.xml"/>
+  <mapping resource="es/academia/modelo/Alumno.hbm.xml"/>
+  <mapping resource="es/academia/modelo/Recibo.hbm.xml"/>
+  <mapping resource="es/academia/modelo/DatosAcademia.hbm.xml"/>
+  <mapping resource="es/academia/modelo/Trcontab.hbm.xml"/>
+  <mapping resource="es/academia/modelo/Aula.hbm.xml"/>
+  <mapping resource="es/academia/modelo/Matricula.hbm.xml"/>
+  <mapping resource="es/academia/modelo/Profesor.hbm.xml"/>
+  <mapping resource="es/academia/modelo/Materia.hbm.xml"/>
+ </session-factory>
+</hibernate-configuration>

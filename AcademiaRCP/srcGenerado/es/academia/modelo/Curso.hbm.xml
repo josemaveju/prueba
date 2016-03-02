@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 21-jul-2014 23:03:02 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="es.academia.modelo.Curso" table="curso" catalog="academia">
+        <id name="idCurso" type="java.lang.Integer">
+            <column name="IdCurso" />
+            <generator class="identity" />
+        </id>
+        <property name="descCurso" type="string">
+            <column name="DescCurso" length="100" />
+        </property>
+        <property name="idProfesor" type="int">
+            <column name="IdProfesor" not-null="true" />
+        </property>
+        <property name="horasSemana" type="java.lang.Integer">
+            <column name="Horas_Semana" />
+        </property>
+        <property name="annoCurso" type="string">
+            <column name="Anno_Curso" length="10" />
+        </property>
+        <property name="FInicio" type="date">
+            <column name="F_Inicio" length="10" />
+        </property>
+        <property name="FFin" type="date">
+            <column name="F_Fin" length="10" />
+        </property>
+        <property name="maxAlumnos" type="java.lang.Integer">
+            <column name="MaxAlumnos" />
+        </property>
+        <property name="impMatricula" type="big_decimal">
+            <column name="impMatricula" precision="13" />
+        </property>
+        <property name="impMes" type="big_decimal">
+            <column name="impMes" precision="13" />
+        </property>
+        <property name="impHora" type="big_decimal">
+            <column name="impHora" precision="13" />
+        </property>
+        <many-to-one name="materia" column="IdMateria"  />
+        <many-to-one name="aula" column="IdAula"  />
+        
+         <set name="matriculas" cascade="delete-orphan" fetch="join"> 
+    		<key column="idMatricula" /> 
+    		<one-to-many class="es.academia.modelo.Matricula" /> 
+		</set>
+        
+    </class>
+</hibernate-mapping>

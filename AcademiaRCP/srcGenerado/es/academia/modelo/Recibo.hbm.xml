@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 21-jul-2014 23:03:02 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="es.academia.modelo.Recibo" table="recibo" catalog="academia">
+        <id name="idRecibo" type="java.lang.Integer">
+            <column name="IdRecibo" />
+            <generator class="identity" />
+        </id>
+ 
+        <property name="idMatricula" type="int">
+            <column name="IdMatricula" not-null="true" />
+        </property>
+<!--  
+        <property name="idSerie" type="int">
+            <column name="IdSerie" not-null="true" />
+        </property>
+-->        
+        <property name="numRecibo" type="java.lang.Integer">
+            <column name="numRecibo" />
+        </property>
+        <property name="concepto" type="string">
+            <column name="Concepto" length="200" />
+        </property>
+        <property name="FGeneracion" type="date">
+            <column name="F_Generacion" length="10" />
+        </property>
+        <property name="FDesde" type="date">
+            <column name="F_Desde" length="10" />
+        </property>
+        <property name="FHasta" type="date">
+            <column name="F_Hasta" length="10" />
+        </property>
+        <property name="impMes" type="big_decimal">
+            <column name="ImpMes" precision="12" />
+        </property>
+        <property name="numHoras" type="java.lang.Integer">
+            <column name="NumHoras" />
+        </property>
+        <property name="precHora" type="big_decimal">
+            <column name="Prec_Hora" precision="6" />
+        </property>
+        <property name="impHoras" type="big_decimal">
+            <column name="ImpHoras" precision="12" />
+        </property>
+        <property name="descuento" type="big_decimal">
+            <column name="Descuento" precision="6" />
+        </property>
+        <property name="impTotal" type="big_decimal">
+            <column name="ImpTotal" precision="12" />
+        </property>
+        <property name="pagado" type="string">
+            <column name="Pagado" length="1" />
+        </property>
+        <property name="indExportado" type="string">
+            <column name="IndExportado" length="1" />
+        </property>
+        <property name="estadoRecibo" type="string">
+            <column name="estadoRecibo" length="1" />
+        </property>
+        <many-to-one name="matricula" column="IdMatricula"  lazy="false" insert="false" update="false"/>
+        <many-to-one name="idSerie" column="IdSerie"  lazy="false" />
+    </class>
+</hibernate-mapping>
