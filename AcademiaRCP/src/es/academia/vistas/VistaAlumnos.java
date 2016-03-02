@@ -234,7 +234,7 @@ public class VistaAlumnos extends ViewPart implements IConstantes{
 			}
 			{
 				Composite composite = new Composite(sashForm, SWT.BORDER);
-				composite.setBackground(SWTResourceManager.getColor(135, 206, 235));
+				composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
 				composite.setLayout(new BorderLayout(0, 0));
 				{
 					Composite composite_1 = new Composite(composite, SWT.NONE);
