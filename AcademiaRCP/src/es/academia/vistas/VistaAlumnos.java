@@ -368,7 +368,7 @@ public class VistaAlumnos extends ViewPart implements IConstantes{
 						};
 
 						TableColumn tblclmnNombre = tableViewerColumn.getColumn();
-						tblclmnNombre.setWidth(130);
+						tblclmnNombre.setWidth(130);  
 						tblclmnNombre.setText("Nombre");
 					}
 					{
