@@ -22,6 +22,7 @@ import es.academia.modelo.AlumnoHome;
 import es.academia.modelo.Profesor;
 import es.academia.modelo.ProfesorHome;
 import es.academia.utils.ACALog;
+import es.academia.utils.BuscarLista;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
@@ -31,8 +32,8 @@ import org.eclipse.core.databinding.beans.BeanProperties;
 public class BuscarDlg extends TitleAreaDialog {
 	private static final Logger log = ACALog.getLogger(BuscarDlg.class);
 	
-	public static final String BUSCAR_ALUMO = "alumno";
-	public static final String BUSCAR_PROFESOR = "profesor";
+//	public static final String BUSCAR_ALUMO = "alumno";
+//	public static final String BUSCAR_PROFESOR = "profesor";
 	
 	private DataBindingContext m_bindingContext;
 	private Text txNombre;
@@ -73,9 +74,9 @@ public class BuscarDlg extends TitleAreaDialog {
 		setTitleImage(ResourceManager.getPluginImage("AcademiaRCP", "icons/find_alumno_72.png"));
 		setMessage("Rellena los campos por los que quieres buscar y pulsa OK");
 
-		if (tipoBusqueda.equalsIgnoreCase(BUSCAR_ALUMO))
+		if (tipoBusqueda.equalsIgnoreCase(BuscarLista.BUSCAR_ALUMO))
 			setTitle("Buscar un alumno");
-		else if (tipoBusqueda.equalsIgnoreCase(BUSCAR_PROFESOR))
+		else if (tipoBusqueda.equalsIgnoreCase(BuscarLista.BUSCAR_PROFESOR))
 			setTitle("Buscar un profesor");
 		
 		
@@ -150,7 +151,10 @@ public class BuscarDlg extends TitleAreaDialog {
 	
 	private void buscarAlumnos() {
 
-		if (tipoBusqueda.equalsIgnoreCase(BUSCAR_ALUMO)){
+		setEncontrados((List)BuscarLista.buscarListaAvanzada(tipoBusqueda, txNombre.getText(), 
+				        txApellidos.getText(), txNIF.getText(), txCodigo.getText()));
+
+		/*		if (tipoBusqueda.equalsIgnoreCase(BUSCAR_ALUMO)){
 			Alumno alumno = new Alumno();
 			alumno.setNombre(txNombre.getText());
 			alumno.setApellidos(txApellidos.getText());
@@ -173,7 +177,7 @@ public class BuscarDlg extends TitleAreaDialog {
 			setEncontrados((List)profesores);
 			
 		}
-			
+*/			
 
 /*		log.debug("Alumnos: " + alumnos);
 		Iterator it = alumnos.iterator();

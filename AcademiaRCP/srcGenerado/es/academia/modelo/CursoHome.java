@@ -127,8 +127,8 @@ public class CursoHome {
         		crit.add(Restrictions.eq( "idAlumno", instance.getIdCurso() ));
         	if (instance.getDescCurso() != null)
         		crit.add(Restrictions.like("nombre", "%"+instance.getDescCurso()+"%"));
-        	if (instance.getIdProfesor() != 0)
-        		crit.add(Restrictions.like("apellidos", "%"+instance.getIdProfesor()+"%"));
+        	if (instance.getProfesor().getIdProfesor() != 0)
+        		crit.add(Restrictions.like("apellidos", "%"+instance.getProfesor().getIdProfesor()+"%"));
         	
         	List<Curso> results =crit.list();
         	log.debug("find by example successful, result size: " + results.size());

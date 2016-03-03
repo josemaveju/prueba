@@ -11,9 +11,9 @@
         <property name="descCurso" type="string">
             <column name="DescCurso" length="100" />
         </property>
-        <property name="idProfesor" type="int">
-            <column name="IdProfesor" not-null="true" />
-        </property>
+<!--         <property name="idProfesor" type="int"> -->
+<!--             <column name="IdProfesor" not-null="true" /> -->
+<!--         </property> -->
         <property name="horasSemana" type="java.lang.Integer">
             <column name="Horas_Semana" />
         </property>
@@ -40,7 +40,8 @@
         </property>
         <many-to-one name="materia" column="IdMateria"  />
         <many-to-one name="aula" column="IdAula"  />
-        
+        <many-to-one name="profesor" column="IdProfesor"  />
+                
          <set name="matriculas" cascade="delete-orphan" fetch="join"> 
     		<key column="idMatricula" /> 
     		<one-to-many class="es.academia.modelo.Matricula" /> 

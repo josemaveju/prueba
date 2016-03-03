@@ -15,7 +15,7 @@ public class Curso extends AbstractModelObject implements java.io.Serializable {
 	private Integer idCurso;
 	private String descCurso;
 //	private int idMateria;
-	private int idProfesor;
+//	private int idProfesor;
 //	private int idAula;
 	private Integer horasSemana;
 	private String annoCurso;
@@ -27,6 +27,7 @@ public class Curso extends AbstractModelObject implements java.io.Serializable {
 	private BigDecimal impHora;
 	private Materia materia;
 	private Aula aula;
+	private Profesor profesor;
 	private Set<Matricula> matriculas = new HashSet<Matricula>();  
 	
 	
@@ -39,13 +40,13 @@ public class Curso extends AbstractModelObject implements java.io.Serializable {
 		this.idAula = idAula;
 	}
 */
-	public Curso(String descCurso,  int idProfesor, 
+	public Curso(String descCurso,  Profesor profesor, 
 			Integer horasSemana, String annoCurso, Date FInicio, Date FFin,
 			Integer maxAlumnos, BigDecimal impMatricula, BigDecimal impMes,
 			BigDecimal impHora) {
 		this.descCurso = descCurso;
 		
-		this.idProfesor = idProfesor;
+		this.profesor = profesor;
 		
 		this.horasSemana = horasSemana;
 		this.annoCurso = annoCurso;
@@ -83,7 +84,7 @@ public class Curso extends AbstractModelObject implements java.io.Serializable {
 		firePropertyChange("idMateria", this.idMateria, idMateria);
 		this.idMateria = idMateria;
 	}
-*/
+
 	public int getIdProfesor() {
 		return this.idProfesor;
 	}
@@ -92,7 +93,7 @@ public class Curso extends AbstractModelObject implements java.io.Serializable {
 		firePropertyChange("idProfesor", this.idProfesor, idProfesor);
 		this.idProfesor = idProfesor;
 	}
-/*
+
 	public int getIdAula() {
 		return this.idAula;
 	}
@@ -192,6 +193,14 @@ public class Curso extends AbstractModelObject implements java.io.Serializable {
 		this.aula = aula;
 	}
 
+	public Profesor getProfesor() {
+		return profesor;
+	}
+	
+	public void setProfesor(Profesor profesor) {
+		this.profesor = profesor;
+	}
+	
 	public Set<Matricula> getMatriculas() {
 		return matriculas;
 	}

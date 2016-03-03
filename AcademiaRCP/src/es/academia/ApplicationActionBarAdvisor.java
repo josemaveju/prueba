@@ -22,6 +22,7 @@ import es.academia.acciones.OpenRecibosWizard;
 import es.academia.acciones.OpenViewAction;
 import es.academia.utils.IConstantes;
 import es.academia.vistas.VistaAlumnos;
+import es.academia.vistas.VistaCursos;
 import es.academia.vistas.VistaProfesores;
 
 /**
@@ -86,22 +87,22 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         gestionProfesores = new OpenViewAction(window, "&Profesores", VistaProfesores.ID, "/icons/graduated2_24.png");
         register(gestionProfesores);
         
-        gestionCursos = new OpenViewAction(window, "&Cursos", VistaAlumnos.ID, "/icons/cursos.png");
+        gestionCursos = new OpenViewAction(window, "&Cursos", VistaCursos.ID, "/icons/cursos.png");
         register(gestionCursos);
         
-        gestionRecibos = new OpenViewAction(window, "&Recibos", VistaAlumnos.ID, "/icons/recibos_24.png");
+        gestionRecibos = new OpenViewAction(window, "&Recibos", VistaCursos.ID, "/icons/recibos_24.png");
         register(gestionRecibos);
        
-        gestionFacturas = new OpenViewAction(window, "&Facturas emitidas", VistaAlumnos.ID, "/icons/factura_24.png");
+        gestionFacturas = new OpenViewAction(window, "&Facturas emitidas", VistaCursos.ID, "/icons/factura_24.png");
         register(gestionFacturas);
         
-        gestionContabilidad = new OpenViewAction(window, "&Gestión contable", VistaAlumnos.ID, "/icons/dinero_grafico_24.png");
+        gestionContabilidad = new OpenViewAction(window, "&Gestión contable", VistaCursos.ID, "/icons/dinero_grafico_24.png");
         register(gestionContabilidad);
         
-        gestionMaterias = new OpenViewAction(window, "&Materias", VistaAlumnos.ID, "/icons/libros_24.png");
+        gestionMaterias = new OpenViewAction(window, "&Materias", VistaCursos.ID, "/icons/libros_24.png");
         register(gestionMaterias);
  
-        cobrarRecibo = new OpenViewAction(window, "&Materias", VistaAlumnos.ID, "/icons/payment-icon_16.png");
+        cobrarRecibo = new OpenViewAction(window, "&Materias", VistaCursos.ID, "/icons/payment-icon_16.png");
         register(cobrarRecibo);
         
         generarRecibos = new OpenRecibosWizard (window);

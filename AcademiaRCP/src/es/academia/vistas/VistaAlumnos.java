@@ -32,6 +32,7 @@ import es.academia.dialogos.SendMail;
 import es.academia.modelo.Alumno;
 import es.academia.modelo.AlumnoHome;
 import es.academia.utils.ACALog;
+import es.academia.utils.BuscarLista;
 import es.academia.utils.GestorErrores;
 import es.academia.utils.IConstantes;
 import es.academia.widgets.CLabelAca;
@@ -68,7 +69,7 @@ public class VistaAlumnos extends ViewPart implements IConstantes{
 
 	private ViewerFilter filtroBuscar;
 	private CLabel lblNewLabel;
-	private Text text;
+	private Text txFiltroRapido;
 	public VistaAlumnos() {
 		setTitleImage(ResourceManager.getPluginImage("AcademiaRCP", "icons/Add_alumno_16.png"));
 	}
@@ -86,6 +87,7 @@ public class VistaAlumnos extends ViewPart implements IConstantes{
 //			sashForm.setForeground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
 			{
 				ExpandBar expandBar = new ExpandBar(sashForm, SWT.BORDER);
+				expandBar.setBackground(SWTResourceManager.getColor(176, 196, 222));
 //				expandBar.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
 //				expandBar.setForeground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
 				{
@@ -95,6 +97,7 @@ public class VistaAlumnos extends ViewPart implements IConstantes{
 					xpndtmAlumnos.setText("Alumnos");
 					{
 						Composite composite = new Composite(expandBar, SWT.NONE);
+						composite.setBackground(SWTResourceManager.getColor(176, 196, 222));
 						xpndtmAlumnos.setControl(composite);
 						composite.setLayout(new RowLayout(SWT.VERTICAL));
 						{
@@ -145,7 +148,7 @@ public class VistaAlumnos extends ViewPart implements IConstantes{
 								}
 							});
 							lblBuscarAlumno.setImage(ResourceManager.getPluginImage("AcademiaRCP", "icons/buscar_16.png"));
-							lblBuscarAlumno.setText("Buscar alumno");
+							lblBuscarAlumno.setText("Filtro avanzado");
 						}
 						{
 							CLabelAca lblEnviarEmail = new CLabelAca(composite, SWT.NONE);
@@ -183,6 +186,7 @@ public class VistaAlumnos extends ViewPart implements IConstantes{
 					xpndtmCursos.setText("Cursos");
 					{
 						Composite composite = new Composite(expandBar, SWT.NONE);
+						composite.setBackground(SWTResourceManager.getColor(176, 196, 222));
 						xpndtmCursos.setControl(composite);
 						composite.setLayout(new RowLayout(SWT.VERTICAL));
 						{
@@ -210,6 +214,7 @@ public class VistaAlumnos extends ViewPart implements IConstantes{
 					xpndtmRecibos.setText("Recibos");
 					{
 						Composite composite = new Composite(expandBar, SWT.NONE);
+						composite.setBackground(SWTResourceManager.getColor(176, 196, 222));
 						xpndtmRecibos.setControl(composite);
 						composite.setLayout(new RowLayout(SWT.VERTICAL));
 						{
@@ -237,11 +242,13 @@ public class VistaAlumnos extends ViewPart implements IConstantes{
 				composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
 				composite.setLayout(new BorderLayout(0, 0));
 				{
-					Composite composite_1 = new Composite(composite, SWT.NONE);
-					composite_1.setLayoutData(BorderLayout.NORTH);
-					composite_1.setLayout(new FormLayout());
+					Composite composite_Cabecera = new Composite(composite, SWT.NONE);
+					composite_Cabecera.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
+					composite_Cabecera.setLayoutData(BorderLayout.NORTH);
+					composite_Cabecera.setLayout(new FormLayout());
 					{
-						lblNewLabel = new CLabel(composite_1, SWT.NONE);
+						lblNewLabel = new CLabel(composite_Cabecera, SWT.NONE);
+						lblNewLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
 						FormData fd_lblNewLabel = new FormData();
 						fd_lblNewLabel.top = new FormAttachment(0, 3);
 						fd_lblNewLabel.left = new FormAttachment(0, 3);
@@ -250,7 +257,8 @@ public class VistaAlumnos extends ViewPart implements IConstantes{
 						lblNewLabel.setText("");
 					}
 					{
-						Composite composite_2 = new Composite(composite_1, SWT.NONE);
+						Composite composite_2 = new Composite(composite_Cabecera, SWT.NONE);
+						composite_2.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
 						FormData fd_composite_2 = new FormData();
 						fd_composite_2.bottom = new FormAttachment(0, 81);
 						fd_composite_2.top = new FormAttachment(0, 3);
@@ -263,16 +271,20 @@ public class VistaAlumnos extends ViewPart implements IConstantes{
 						composite_2.setLayout(rl_composite_2);
 						{
 							CLabel lblListaDeAlumnos = new CLabel(composite_2, SWT.NONE);
+							lblListaDeAlumnos.setBackgroundMode(SWT.INHERIT_FORCE);
+							lblListaDeAlumnos.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
 							lblListaDeAlumnos.setLeftMargin(0);
 							lblListaDeAlumnos.setFont(SWTResourceManager.getFont("Segoe UI", 16, SWT.BOLD | SWT.ITALIC));
 							lblListaDeAlumnos.setImage(null);
 							lblListaDeAlumnos.setText("Lista de alumnos");
 						}
 						{
-							Composite composite_3 = new Composite(composite_2, SWT.NONE);
-							composite_3.setLayout(new RowLayout(SWT.HORIZONTAL));
+							Composite compositeRadio = new Composite(composite_2, SWT.NONE);
+							compositeRadio.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
+							compositeRadio.setLayout(new RowLayout(SWT.HORIZONTAL));
 							{
-								Button btnMostrarTodos = new Button(composite_3, SWT.RADIO);
+								Button btnMostrarTodos = new Button(compositeRadio, SWT.RADIO);
+								btnMostrarTodos.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
 								btnMostrarTodos.addSelectionListener(new SelectionAdapter() {
 									@Override
 									public void widgetSelected(SelectionEvent e) {
@@ -282,7 +294,8 @@ public class VistaAlumnos extends ViewPart implements IConstantes{
 								btnMostrarTodos.setText("Mostrar todos");
 							}
 							{
-								Button btnMostrarSloLos = new Button(composite_3, SWT.RADIO);
+								Button btnMostrarSloLos = new Button(compositeRadio, SWT.RADIO);
+								btnMostrarSloLos.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
 								btnMostrarSloLos.addSelectionListener(new SelectionAdapter() {
 									@Override
 									public void widgetSelected(SelectionEvent e) {
@@ -294,25 +307,34 @@ public class VistaAlumnos extends ViewPart implements IConstantes{
 						}
 					}
 					{
-						Composite composite_3 = new Composite(composite_1, SWT.NONE);
-						composite_3.setLayout(null);
-						FormData fd_composite_3 = new FormData();
-						fd_composite_3.left = new FormAttachment(100, -367);
-						fd_composite_3.top = new FormAttachment(lblNewLabel, 0, SWT.TOP);
-						fd_composite_3.right = new FormAttachment(100, -5);
-						fd_composite_3.bottom = new FormAttachment(0, 81);
-						composite_3.setLayoutData(fd_composite_3);
+						Composite composite_filtro = new Composite(composite_Cabecera, SWT.NONE);
+						composite_filtro.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
+						composite_filtro.setBackgroundMode(SWT.INHERIT_FORCE);
+						composite_filtro.setLayout(null);
+						FormData fd_composite_filtro = new FormData();
+						fd_composite_filtro.left = new FormAttachment(100, -217);
+						fd_composite_filtro.top = new FormAttachment(lblNewLabel, 0, SWT.TOP);
+						fd_composite_filtro.right = new FormAttachment(100, -5);
+						fd_composite_filtro.bottom = new FormAttachment(0, 81);
+						composite_filtro.setLayoutData(fd_composite_filtro);
 						
-						text = new Text(composite_3, SWT.BORDER | SWT.SEARCH);
-						text.setBounds(173, 47, 146, 21);
+						txFiltroRapido = new Text(composite_filtro, SWT.BORDER | SWT.SEARCH);
+						txFiltroRapido.setBounds(33, 47, 146, 21);
 						
-						CLabel lblBuscar = new CLabel(composite_3, SWT.CENTER);
-						lblBuscar.setBounds(325, 47, 24, 21);
-						lblBuscar.setRightMargin(0);
-						lblBuscar.setLeftMargin(0);
-						lblBuscar.setImage(ResourceManager.getPluginImage("AcademiaRCP", "icons/search.gif"));
-						lblBuscar.setTouchEnabled(true);
-						lblBuscar.setText("");
+						Button button = new Button(composite_filtro, SWT.NONE);
+						button.addMouseListener(new MouseAdapter() {
+							@Override
+							public void mouseUp(MouseEvent e) {
+							}
+						});
+						button.addSelectionListener(new SelectionAdapter() {
+							@Override
+							public void widgetSelected(SelectionEvent e) {
+								filtroRapido();
+							}
+						});
+						button.setImage(ResourceManager.getPluginImage("AcademiaRCP", "icons/search.gif"));
+						button.setBounds(179, 46, 24, 22);
 					}
 				}
 				{
@@ -323,18 +345,12 @@ public class VistaAlumnos extends ViewPart implements IConstantes{
 					rl_composite_1.marginTop = 11;
 					composite_1.setLayout(rl_composite_1);
 					{
-						Button btnAceptar = new Button(composite_1, SWT.NONE);
-						btnAceptar.setText("Aceptar");
-					}
-					{
-						Button btnCancelar = new Button(composite_1, SWT.NONE);
-						btnCancelar.setText("Cancelar");
 					}
 				}
 				{
 					tableViewer = new TableViewer(composite, SWT.BORDER | SWT.FULL_SELECTION);
 					table = tableViewer.getTable();
-					table.setBackground(SWTResourceManager.getColor(248, 248, 255));
+					table.setBackground(SWTResourceManager.getColor(240, 248, 255));
 					table.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseDoubleClick(MouseEvent e) {
@@ -562,11 +578,24 @@ public class VistaAlumnos extends ViewPart implements IConstantes{
 				
 		alumnos = null;
 		BuscarDlg dlg = new BuscarDlg(getSite().getShell());
-		dlg.setTipoBusqueda(BuscarDlg.BUSCAR_ALUMO);
+		dlg.setTipoBusqueda(BuscarLista.BUSCAR_ALUMO);
 		
 		dlg.open();
 		
 		alumnos = dlg.getEncontrados();
+		
+		hacerFiltro();
+	}
+	
+	private void filtroRapido(){
+		
+		alumnos = null;
+		alumnos = BuscarLista.buscarNombreApellido(BuscarLista.BUSCAR_ALUMO, txFiltroRapido.getText());
+		
+		hacerFiltro();
+	}
+	
+	private void hacerFiltro(){
 		if (alumnos != null){
 		    filtroBuscar = new ViewerFilter(){
 			public boolean select (Viewer visor, Object objetoPadre, Object objeto){
@@ -588,5 +617,7 @@ public class VistaAlumnos extends ViewPart implements IConstantes{
 		
 			tableViewer.addFilter(filtroBuscar);
 		}
+		
 	}
+	
 }

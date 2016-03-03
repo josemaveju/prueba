@@ -22,20 +22,6 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            name="Message"
-            allowMultiple="true"
-            icon="icons/sample2.gif"
-            class="es.academia.View"
-            id="AcademiaRCP.view">
-      </view>
-      <view
-            name="Mailboxes"
-            allowMultiple="true"
-            icon="icons/sample3.gif"
-            class="es.academia.NavigationView"
-            id="AcademiaRCP.navigationView">
-      </view>
-      <view
             class="es.academia.vistas.VistaAlumnos"
             id="es.academia.vistas.vistaAlumnos"
             name="Lista de alumnos">
@@ -50,6 +36,12 @@
             class="es.academia.vistas.VistaInformes"
             id="es.academia.vistas.VistaInformes"
             name="Informe">
+      </view>
+      <view
+            class="es.academia.vistas.VistaCursos"
+            id="es.academia.vistas.vistaCursos"
+            name="Lista de cursos"
+            restorable="true">
       </view>
    </extension>
    <extension
@@ -116,6 +108,32 @@
                value="plugin_customization.ini">
          </property>
       </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="AcademiaRCP.configAcademia"
+            class="es.academia.propiedades.AulasPreferences"
+            id="AcademiaRCP.AulasPreferences"
+            name="Configurar aulas">
+      </page>
+      <page
+            class="es.academia.propiedades.ConfigAcademiaPreferences"
+            id="AcademiaRCP.configAcademia"
+            name="Configurar datos de academia">
+      </page>
+      <page
+            category="AcademiaRCP.configAcademia"
+            class="es.academia.propiedades.MailPreferences"
+            id="AcademiaRCP.MailPreferences"
+            name="Preferencias de correo">
+      </page>
+      <page
+            category="AcademiaRCP.configAcademia"
+            class="es.academia.propiedades.SeriesPreferences"
+            id="AcademiaRCP.SeriesPreferences"
+            name="Recibos y facturas">
+      </page>
    </extension>
 
 </plugin>
