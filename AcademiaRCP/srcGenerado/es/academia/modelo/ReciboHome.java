@@ -55,19 +55,30 @@ public class ReciboHome {
 			sesion.saveOrUpdate(rec);
 
 	}
-
-	public void persist(Recibo transientInstance) {
+	public void persist(Recibo recibo) {
+		persist (recibo,null);
+	}
+	public void persist(Recibo recibo, Session sesion) {
 		log.debug("persisting Recibo instance");
+		boolean hacerCommit =false;
 		
-        Session sesion = getSessionFactory().getCurrentSession();
-        sesion.beginTransaction();
+        if (sesion == null){
+        	sesion = getSessionFactory().getCurrentSession();
+            sesion.beginTransaction();
+            hacerCommit=true;
+        }
+        
 		try {
-			sesion.saveOrUpdate(transientInstance);
+			sesion.saveOrUpdate(recibo);
 			log.debug("persist successful");
-			sesion.getTransaction().commit();
+
+			if (hacerCommit)
+				sesion.getTransaction().commit();
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);
-			sesion.getTransaction().rollback();
+
+			if (hacerCommit)
+				sesion.getTransaction().rollback();
 			throw re;
 		}
 	}

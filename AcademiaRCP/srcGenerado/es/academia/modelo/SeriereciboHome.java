@@ -32,16 +32,28 @@ public class SeriereciboHome {
     }
 
 	public void persist(Serierecibo transientInstance) {
+		persist(transientInstance,null);
+	}
+	
+	public void persist(Serierecibo transientInstance,Session sesion) {
 		log.debug("persistiendo instancia de SerieRecibo");
-        Session sesion = getSessionFactory().getCurrentSession();
-        sesion.beginTransaction();
+    	boolean hacerCommit =false;
+    	
+		if (sesion == null){
+    		sesion = getSessionFactory().getCurrentSession();
+    		sesion.beginTransaction();
+    		hacerCommit = true;
+    	}
+
 		try {
 			sesion.saveOrUpdate(transientInstance);
 			log.debug("persist OK");
-			sesion.getTransaction().commit();
+			if (hacerCommit)
+				sesion.getTransaction().commit();
 		} catch (RuntimeException re) {
 			log.error("persist falló", re);
-			sesion.getTransaction().rollback();
+			if (hacerCommit)
+				sesion.getTransaction().rollback();
 			throw re;
 		}
 	}
@@ -152,15 +164,23 @@ public class SeriereciboHome {
     }
     
     public Serierecibo obtenerSerieDefecto(){
+    	return obtenerSerieDefecto (null);
+    }
+    public Serierecibo obtenerSerieDefecto(Session sesion){
 
     	Serierecibo result;
+    	boolean hacerCommit =false;
     	
-        Session sesion = getSessionFactory().getCurrentSession();
-        sesion.beginTransaction();
+		if (sesion == null){
+    		sesion = getSessionFactory().getCurrentSession();
+    		sesion.beginTransaction();
+    		hacerCommit = true;
+    	}
 
         List<Serierecibo> lista=(List<Serierecibo>)sesion.createQuery("from Serierecibo where defecto='S'").list();
  
-        sesion.getTransaction().commit();
+        if (hacerCommit)
+        	sesion.getTransaction().commit();
 
         if (!lista.isEmpty())
         	result = (Serierecibo) lista.get(0);

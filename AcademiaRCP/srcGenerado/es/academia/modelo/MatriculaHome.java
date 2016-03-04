@@ -25,24 +25,33 @@ public class MatriculaHome {
 
 	private static final Log log = LogFactory.getLog(MatriculaHome.class);
 
-	private final SessionFactory sessionFactory = getSessionFactory();
+//	private final SessionFactory sessionFactory = getSessionFactory();
 
     protected SessionFactory getSessionFactory() {
     	return HibernateUtil.getSessionFactory();
 }
 
-	public void persist(Matricula transientInstance) {
+	public void persist(Matricula matricula) {
+		persist (matricula,null);
+	}
+
+    public void persist(Matricula matricula, Session sesion) {
 		log.debug("persisting Matricula instance");
-		
-        Session sesion = getSessionFactory().getCurrentSession();
-        sesion.beginTransaction();
+		boolean hacerCommit =false;
+        if (sesion == null){
+        	sesion = getSessionFactory().getCurrentSession();
+            sesion.beginTransaction();
+            hacerCommit=true;
+        }
 		try {
-			sesion.saveOrUpdate(transientInstance);
+			sesion.saveOrUpdate(matricula);
 			log.debug("persist successful");
-			sesion.getTransaction().commit();
+			if (hacerCommit)
+				sesion.getTransaction().commit();
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);
-			sesion.getTransaction().rollback();
+			if (hacerCommit)
+				sesion.getTransaction().rollback();
 			throw re;
 		}
 	}

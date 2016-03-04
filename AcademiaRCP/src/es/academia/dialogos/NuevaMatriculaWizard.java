@@ -43,7 +43,7 @@ public class NuevaMatriculaWizard extends Wizard  implements IConstantes{
 		try {
 			mp.matAl.matricular(mp.matricula);
 			return true;
-		} catch (NegocioException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			GestorErrores.mensajeTexto("Error matriculando al alumno: " + e.getMessage(), NIVEL_ERROR);
 			e.printStackTrace();

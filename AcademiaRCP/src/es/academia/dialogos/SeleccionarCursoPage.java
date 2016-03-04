@@ -123,7 +123,7 @@ public class SeleccionarCursoPage extends WizardPage {
 		                   new WritableList(cursoHome.listarTodos(), Curso.class), 
 		                   BeanProperties.values(Curso.class, new String[] {
 				                          "idCurso", "descCurso","FInicio","FFin",
-				                          "idProfesor"}));	
+				                          "profesor.nombre"}));	
 	}
 	
 

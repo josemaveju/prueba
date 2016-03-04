@@ -28,7 +28,7 @@ public class ProfesorHome {
 
 	private static final Logger log = ACALog.getLogger(ProfesorHome.class);
 
-	private final SessionFactory sessionFactory = getSessionFactory();
+//	private final SessionFactory sessionFactory = getSessionFactory();
 	
     private List profesores = new LinkedList();
 
@@ -57,7 +57,7 @@ public class ProfesorHome {
         Session sesion = getSessionFactory().getCurrentSession();
         sesion.beginTransaction();
 		try {
-			sessionFactory.getCurrentSession().saveOrUpdate(instance);
+			sesion.saveOrUpdate(instance);
 			log.debug("attach successful");
 			sesion.getTransaction().commit();
 		} catch (RuntimeException re) {
@@ -72,7 +72,7 @@ public class ProfesorHome {
         Session sesion = getSessionFactory().getCurrentSession();
         sesion.beginTransaction();
 		try {
-			sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
+			sesion.lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 			sesion.getTransaction().commit();
 		} catch (RuntimeException re) {
@@ -87,7 +87,7 @@ public class ProfesorHome {
         Session sesion = getSessionFactory().getCurrentSession();
         sesion.beginTransaction();
 		try {
-			sessionFactory.getCurrentSession().delete(persistentInstance);
+			sesion.delete(persistentInstance);
 			log.debug("delete successful");
 			sesion.getTransaction().commit();
 		} catch (RuntimeException re) {
@@ -102,8 +102,7 @@ public class ProfesorHome {
         Session sesion = getSessionFactory().getCurrentSession();
         sesion.beginTransaction();
 		try {
-			Profesor result = (Profesor) sessionFactory.getCurrentSession()
-					.merge(detachedInstance);
+			Profesor result = (Profesor) sesion.merge(detachedInstance);
 			log.debug("merge successful");
 			sesion.getTransaction().commit();
 			return result;

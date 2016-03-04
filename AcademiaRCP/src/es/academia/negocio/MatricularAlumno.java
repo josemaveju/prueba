@@ -14,6 +14,7 @@ import es.academia.modelo.Alumno;
 import es.academia.modelo.AlumnoHome;
 import es.academia.modelo.Curso;
 import es.academia.modelo.CursoHome;
+import es.academia.modelo.HibernateUtil;
 import es.academia.modelo.Matricula;
 import es.academia.modelo.MatriculaHome;
 import es.academia.modelo.Recibo;
@@ -23,6 +24,9 @@ import es.academia.modelo.SeriereciboHome;
 import es.academia.utils.ACALog;
 import es.academia.utils.IConstantes;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
 public class MatricularAlumno {
 //	private Matricula matricula;
 	private static final Logger log = ACALog.getLogger(MatricularAlumno.class);
@@ -30,7 +34,6 @@ public class MatricularAlumno {
 	public MatricularAlumno(){
 	
 //		this.matricula = matricula;
-		
 	}
 	
 	public static Matricula obtenerDatosDefecto(Integer idCurso, Integer idAlumno) throws NegocioException{
@@ -74,20 +77,37 @@ public class MatricularAlumno {
 	public void matricular(Matricula matricula)  throws NegocioException{
 
 		// Validamos que no sean null 
+	
 		if (matricula == null)
 			throw new NegocioException(NegocioException.ERROR_CREANDO_MATRICULA,
 					   "Error al crear la matricula. Matricula no debe ser nula","MATRICULAR_ALUMNO");
 		
-		// Validaciones del recibo.
 		
-		validarMatricula(matricula);
+		Session sesion= HibernateUtil.getSessionFactory().getCurrentSession();	
+		try {
+			sesion.beginTransaction();
+			
+			// Validaciones del recibo.
+			validarMatricula(matricula);
 
-		// Insertar en la tabla Matricula
-		MatriculaHome mh = new MatriculaHome();
-		mh.persist(matricula);
+			// Insertar en la tabla Matricula
+			MatriculaHome mh = new MatriculaHome();
+			mh.persist(matricula,sesion);
+			
+			// Generar los recibos.
+			generarRecibos(matricula,sesion);
+
+			// Si todo ha ido bien hacemos COMMIT de todo.
+			sesion.getTransaction().commit();
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			sesion.getTransaction().rollback();
+			e.printStackTrace();
+			throw e;
+		}
 		
-		// Generar los recibos.
-		generarRecibos(matricula);
+		
 		
 	}
 	
@@ -96,7 +116,7 @@ public class MatricularAlumno {
 		
 	}
 
-	private void generarRecibos(Matricula matricula) throws NegocioException{
+	private void generarRecibos(Matricula matricula, Session sesion) throws NegocioException{
 	
 		Calendar desde = GregorianCalendar.getInstance();
 		Calendar hasta = GregorianCalendar.getInstance();
@@ -108,54 +128,6 @@ public class MatricularAlumno {
 
 		try {
 			// Valores fijos para todos los recibos
-			Recibo rec = new Recibo();
-			rec.setIdMatricula(matricula.getIdMatricula());
-			rec.setFGeneracion(null);
-			if (matricula.getImpMes() == null)
-				rec.setImpMes(new BigDecimal(0));
-			else 
-				rec.setImpMes(matricula.getImpMes());
-
-			if (matricula.getHorasDefecto() == null)
-				rec.setNumHoras(new Integer(0));
-			else 
-				rec.setNumHoras(matricula.getHorasDefecto());
-			
-			if (matricula.getImpHora() == null)
-				rec.setPrecHora(new BigDecimal(0));
-			else 
-				rec.setPrecHora(matricula.getImpHora());
-
-			if (rec.getNumHoras()== null ||rec.getImpHoras()==null)
-				rec.setImpHoras(new BigDecimal(0));
-			else
-				rec.setImpHoras(new BigDecimal(rec.getNumHoras().doubleValue()*rec.getImpHoras().doubleValue()));
-			
-			if (matricula.getDescuento() ==null)
-				rec.setDescuento(new BigDecimal(0));
-			else 
-				rec.setDescuento(matricula.getDescuento());
-			
-			double importeTotal=0.0;
-			double importeMes= rec.getImpMes().doubleValue();
-			double importeHoras = rec.getImpHoras().doubleValue();
-			double descuento = rec.getDescuento().doubleValue();
-			
-			importeTotal = (importeMes + importeHoras)- ((importeMes+importeHoras)*descuento) / 100;
-			rec.setImpTotal(new BigDecimal(importeTotal));
-			
-			rec.setPagado("N");
-			rec.setIndExportado("N");
-			rec.setEstadoRecibo(Recibo.ESTADOPENDIENTE);
-			
-			// Obtener la serie de los recibos en curso 
-			
-			SeriereciboHome srh = new SeriereciboHome();
-			Serierecibo sr = srh.obtenerSerieDefecto();
-			siguienteRecibo = sr.getSigRecibo();
-			
-			rec.setIdSerie(sr);
-			
 		
 			// Generar todos los recibos
 			desde.setTime(matricula.getFDesde());
@@ -166,11 +138,76 @@ public class MatricularAlumno {
 			
 			ReciboHome rh = new ReciboHome();
 			
+			log.debug("Antes de empezar el bucle:");
+			log.debug("desde: " + desde.get(Calendar.YEAR)+"/"+(desde.get(Calendar.MONTH)+1)+"/"+desde.get(Calendar.DAY_OF_MONTH));
+			log.debug("hasta: " + hasta.get(Calendar.YEAR)+"/"+(hasta.get(Calendar.MONTH)+1)+"/"+hasta.get(Calendar.DAY_OF_MONTH));
+			log.debug("hastaFinMes: " + hastaFinMes.get(Calendar.YEAR)+"/"+(hastaFinMes.get(Calendar.MONTH)+1)+"/"+hastaFinMes.get(Calendar.DAY_OF_MONTH));
+			log.debug("cl: " + cl.get(Calendar.YEAR)+"/"+(cl.get(Calendar.MONTH)+1)+"/"+cl.get(Calendar.DAY_OF_MONTH));
+			
 			while (cl.compareTo(hastaFinMes)<=0){
 				finMesCl.setTime(cl.getTime());
 				iniMesCl.setTime(cl.getTime());
 				iniMesCl.set(Calendar.DAY_OF_MONTH, cl.getActualMinimum(Calendar.DAY_OF_MONTH));
 				finMesCl.set(Calendar.DAY_OF_MONTH, cl.getActualMaximum(Calendar.DAY_OF_MONTH));
+				log.debug("dentro del bucle:");
+				log.debug("cl: " + cl.get(Calendar.YEAR)+"/"+(cl.get(Calendar.MONTH)+1)+"/"+cl.get(Calendar.DAY_OF_MONTH));
+				log.debug("iniMesCl: " + iniMesCl.get(Calendar.YEAR)+"/"+(iniMesCl.get(Calendar.MONTH)+1)+"/"+iniMesCl.get(Calendar.DAY_OF_MONTH));
+				log.debug("finMesCl: " + finMesCl.get(Calendar.YEAR)+"/"+(finMesCl.get(Calendar.MONTH)+1)+"/"+finMesCl.get(Calendar.DAY_OF_MONTH));
+				Recibo rec = new Recibo();
+				rec.setIdMatricula(matricula.getIdMatricula());
+				rec.setFGeneracion(null);
+				if (matricula.getImpMes() == null)
+					rec.setImpMes(new BigDecimal(0));
+				else 
+					rec.setImpMes(matricula.getImpMes());
+
+				if (matricula.getHorasDefecto() == null)
+					rec.setNumHoras(new Integer(0));
+				else 
+					rec.setNumHoras(matricula.getHorasDefecto());
+				
+				if (matricula.getImpHora() == null)
+					rec.setPrecHora(new BigDecimal(0));
+				else 
+					rec.setPrecHora(matricula.getImpHora());
+
+				if (rec.getNumHoras()== null ||rec.getPrecHora()==null)
+					rec.setImpHoras(new BigDecimal(0));
+				else
+					rec.setImpHoras(new BigDecimal(rec.getNumHoras().doubleValue()*rec.getPrecHora().doubleValue()));
+				
+/*				log.debug("Número de horas matricula: " + matricula.getHorasDefecto().intValue());
+				log.debug("Número de horas recibo: " + rec.getNumHoras().intValue());
+				log.debug("Precio horas matricula: " + matricula.getImpHora().doubleValue());
+				log.debug("Precio horas recibo: " + rec.getPrecHora().doubleValue());
+				log.debug("Importe horas recibo: " + rec.getImpHoras().doubleValue());
+*/				
+				if (matricula.getDescuento() ==null)
+					rec.setDescuento(new BigDecimal(0));
+				else 
+					rec.setDescuento(matricula.getDescuento());
+				
+				double importeTotal=0.0;
+				double importeMes= rec.getImpMes().doubleValue();
+				double importeHoras = rec.getImpHoras().doubleValue();
+				double descuento = rec.getDescuento().doubleValue();
+				
+				importeTotal = (importeMes + importeHoras)- ((importeMes+importeHoras)*descuento) / 100;
+				rec.setImpTotal(new BigDecimal(importeTotal));
+				
+				rec.setPagado("N");
+				rec.setIndExportado("N");
+				rec.setEstadoRecibo(Recibo.ESTADOPENDIENTE);
+				
+				// Obtener la serie de los recibos en curso 
+				
+				SeriereciboHome srh = new SeriereciboHome();
+				Serierecibo sr = srh.obtenerSerieDefecto(sesion);
+				siguienteRecibo = sr.getSigRecibo();
+				sr.setSigRecibo(siguienteRecibo+1);
+				srh.persist(sr,sesion);
+				rec.setIdSerie(sr);
+				
 				if (finMesCl.compareTo(hasta)>0)
 					finMesCl.setTime(hasta.getTime());
 				
@@ -179,8 +216,8 @@ public class MatricularAlumno {
 				rec.setConcepto(concepto);
 				rec.setFDesde(iniMesCl.getTime());
 				rec.setFHasta(finMesCl.getTime());
-				rec.setNumRecibo(new Integer(siguienteRecibo++));
-				rh.persist(rec);
+				rec.setNumRecibo(new Integer(siguienteRecibo));
+				rh.persist(rec,sesion);
 				
 				cl.add(Calendar.MONTH, 1);
 		}
