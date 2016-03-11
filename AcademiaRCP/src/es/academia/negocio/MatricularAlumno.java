@@ -4,9 +4,11 @@ import java.math.BigDecimal;
 
 
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -95,7 +97,7 @@ public class MatricularAlumno {
 			mh.persist(matricula,sesion);
 			
 			// Generar los recibos.
-			generarRecibos(matricula,sesion);
+		//	generarRecibos(matricula,sesion);
 
 			// Si todo ha ido bien hacemos COMMIT de todo.
 			sesion.getTransaction().commit();
@@ -116,8 +118,10 @@ public class MatricularAlumno {
 		
 	}
 
-	private void generarRecibos(Matricula matricula, Session sesion) throws NegocioException{
+	private ArrayList<Recibo> generarRecibos(Matricula matricula, Session sesion) throws NegocioException{
 	
+		ArrayList<Recibo> listaRecibos = new ArrayList<Recibo>();
+		
 		Calendar desde = GregorianCalendar.getInstance();
 		Calendar hasta = GregorianCalendar.getInstance();
 		Calendar hastaFinMes = GregorianCalendar.getInstance();
@@ -136,7 +140,7 @@ public class MatricularAlumno {
 			hastaFinMes.set(Calendar.DAY_OF_MONTH,hastaFinMes.getMaximum(Calendar.DAY_OF_MONTH));
 			cl.setTime(desde.getTime());
 			
-			ReciboHome rh = new ReciboHome();
+//			ReciboHome rh = new ReciboHome();
 			
 			log.debug("Antes de empezar el bucle:");
 			log.debug("desde: " + desde.get(Calendar.YEAR)+"/"+(desde.get(Calendar.MONTH)+1)+"/"+desde.get(Calendar.DAY_OF_MONTH));
@@ -154,7 +158,8 @@ public class MatricularAlumno {
 				log.debug("iniMesCl: " + iniMesCl.get(Calendar.YEAR)+"/"+(iniMesCl.get(Calendar.MONTH)+1)+"/"+iniMesCl.get(Calendar.DAY_OF_MONTH));
 				log.debug("finMesCl: " + finMesCl.get(Calendar.YEAR)+"/"+(finMesCl.get(Calendar.MONTH)+1)+"/"+finMesCl.get(Calendar.DAY_OF_MONTH));
 				Recibo rec = new Recibo();
-				rec.setIdMatricula(matricula.getIdMatricula());
+				//rec.setIdMatricula(matricula.getIdMatricula());
+				rec.setIdMatricula(1);
 				rec.setFGeneracion(null);
 				if (matricula.getImpMes() == null)
 					rec.setImpMes(new BigDecimal(0));
@@ -203,9 +208,9 @@ public class MatricularAlumno {
 				
 				SeriereciboHome srh = new SeriereciboHome();
 				Serierecibo sr = srh.obtenerSerieDefecto(sesion);
-				siguienteRecibo = sr.getSigRecibo();
-				sr.setSigRecibo(siguienteRecibo+1);
-				srh.persist(sr,sesion);
+				//siguienteRecibo = sr.getSigRecibo();
+				//sr.setSigRecibo(siguienteRecibo+1);
+				//srh.persist(sr,sesion);
 				rec.setIdSerie(sr);
 				
 				if (finMesCl.compareTo(hasta)>0)
@@ -217,7 +222,8 @@ public class MatricularAlumno {
 				rec.setFDesde(iniMesCl.getTime());
 				rec.setFHasta(finMesCl.getTime());
 				rec.setNumRecibo(new Integer(siguienteRecibo));
-				rh.persist(rec,sesion);
+			//	rh.persist(rec,sesion);
+				listaRecibos.add(rec);
 				
 				cl.add(Calendar.MONTH, 1);
 		}
@@ -227,6 +233,26 @@ public class MatricularAlumno {
 					   "Error al crear la matricula. Generando recibos por defecto.\n" +e.getMessage()
 					   ,"MATRICULAR_ALUMNO");
 		}
+		return listaRecibos;
+		
+	}
+
+	public List<Recibo> obtenerRecibos(Matricula matricula) throws Exception {
+		Session sesion= HibernateUtil.getSessionFactory().getCurrentSession();
+		List <Recibo> listaRecibos =null;
+		try {
+			sesion.beginTransaction();
+			listaRecibos = generarRecibos(matricula,sesion);
+			// Si todo ha ido bien hacemos COMMIT de todo.
+			sesion.getTransaction().commit();
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			sesion.getTransaction().rollback();
+			e.printStackTrace();
+			throw e;
+		}
+		return listaRecibos;
 		
 	}
 	

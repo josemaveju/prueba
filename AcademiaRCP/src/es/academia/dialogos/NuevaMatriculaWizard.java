@@ -15,6 +15,7 @@ public class NuevaMatriculaWizard extends Wizard  implements IConstantes{
 	
 	protected SeleccionarCursoPage sp;
 	protected NuevaMatriculaPage mp;
+	protected SalidaRecibosPage rp;
 
 	public NuevaMatriculaWizard() {
 		setWindowTitle("Nueva Matrícula");
@@ -27,6 +28,9 @@ public class NuevaMatriculaWizard extends Wizard  implements IConstantes{
 		mp = new NuevaMatriculaPage();
 		mp.setAlumno(alumno);
 		addPage(mp);
+		rp = new SalidaRecibosPage();
+		addPage(rp);
+		
 		
 	}
 

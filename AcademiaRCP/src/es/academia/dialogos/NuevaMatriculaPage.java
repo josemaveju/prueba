@@ -33,7 +33,7 @@ public class NuevaMatriculaPage extends WizardPage implements IConstantes{
 	private DataBindingContext m_bindingContext;
 	private Text txNombreAlumno;
 	private Text txNifAlumno;
-	private Text txDescCurso;
+	protected Text txDescCurso;
 	private Text txImpMatricula;
 	private Text txImpHora;
 	private Text txHorasMes;
@@ -276,11 +276,11 @@ public class NuevaMatriculaPage extends WizardPage implements IConstantes{
 	
 	public boolean canFlipToNextPage (){
 
-	   	 return false;
+		return datosCorrectos();
 	}
 	
 	public boolean canFinish(){
-		return datosCorrectos();
+		return false;
 	}
 
 	private boolean datosCorrectos(){
@@ -301,6 +301,12 @@ public class NuevaMatriculaPage extends WizardPage implements IConstantes{
 		
 		return true;		
 
+	}
+	
+	public WizardPage getNextPage(){
+		SalidaRecibosPage rp = ((NuevaMatriculaWizard)getWizard()).rp;
+		rp.cargarListaRecibos();
+		return rp;
 	}
 	
 }
