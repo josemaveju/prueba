@@ -45,7 +45,7 @@ public class NuevaMatriculaWizard extends Wizard  implements IConstantes{
 
 //		GestorErrores.mensajeTexto("performFinish", NIVEL_ERROR);
 		try {
-			mp.matAl.matricular(mp.matricula);
+			mp.matAl.matricular(mp.matricula,rp.listaRecibos);
 			return true;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

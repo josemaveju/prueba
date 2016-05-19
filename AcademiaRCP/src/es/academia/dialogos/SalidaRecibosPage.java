@@ -31,7 +31,7 @@ public class SalidaRecibosPage extends WizardPage  implements IConstantes{
 	private static final Logger log = ACALog.getLogger(SalidaRecibosPage.class);
 	private Table table;
 	
-	private List<Recibo> listaRecibos = new ArrayList<Recibo>();
+	protected List<Recibo> listaRecibos = new ArrayList<Recibo>();
 
 	private TableViewer tableViewer;
 	private Text txtCurso;

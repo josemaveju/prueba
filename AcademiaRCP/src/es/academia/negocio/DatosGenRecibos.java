@@ -11,6 +11,7 @@ import es.academia.modelo.ReciboHome;
 import es.academia.modelo.Serierecibo;
 import es.academia.modelo.SeriereciboHome;
 import es.academia.utils.ACALog;
+import es.academia.widgets.DateAca;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
@@ -125,7 +126,13 @@ public class DatosGenRecibos {
 			rec.setConcepto(this.concepto);
 			rec.setFDesde(this.fechaEmision);
 			rec.setFHasta(this.fechaFin);
-			rec.setFGeneracion(new Date());
+
+			//rec.setFDesde(this.fechaEmision);
+			//rec.setFHasta(this.fechaFin);
+			Date hoy = new Date();
+			hoy.setTime(System.currentTimeMillis());
+			rec.setFGeneracion(hoy);
+			
 			rec.setNumRecibo(Integer.valueOf(sigRecibo++));
 			rec.setIdSerie(sr);
 			// Datos contables

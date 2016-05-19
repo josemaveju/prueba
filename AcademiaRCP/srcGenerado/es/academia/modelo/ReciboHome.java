@@ -58,6 +58,7 @@ public class ReciboHome {
 	public void persist(Recibo recibo) {
 		persist (recibo,null);
 	}
+	
 	public void persist(Recibo recibo, Session sesion) {
 		log.debug("persisting Recibo instance");
 		boolean hacerCommit =false;
