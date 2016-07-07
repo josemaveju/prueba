@@ -28,6 +28,7 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.core.databinding.beans.BeanProperties;
+import org.eclipse.swt.widgets.Group;
 
 public class BuscarDlg extends TitleAreaDialog {
 	private static final Logger log = ACALog.getLogger(BuscarDlg.class);
@@ -47,7 +48,7 @@ public class BuscarDlg extends TitleAreaDialog {
 	
 	
 	/**
-	 * @wbp.nonvisual location=85,289
+	 * @wbp.nonvisual location=85,299
 	 */
 	private final Alumno alumno = new Alumno();
 	private final Profesor profesor  = new Profesor();
@@ -59,6 +60,7 @@ public class BuscarDlg extends TitleAreaDialog {
 	public BuscarDlg(Shell parentShell) {
 		super(parentShell);
 		setHelpAvailable(false);
+
 	}
 	
 	public void setTipoBusqueda(String busqueda){
@@ -71,8 +73,9 @@ public class BuscarDlg extends TitleAreaDialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
+		setTitle("B\u00FAsqueda avanzada");
 		setTitleImage(ResourceManager.getPluginImage("AcademiaRCP", "icons/find_alumno_72.png"));
-		setMessage("Rellena los campos por los que quieres buscar y pulsa OK");
+		setMessage("Rellena los campos por los que quieres buscar y pulsa OK\r\nPuedes rellenar varios a la vez");
 
 		if (tipoBusqueda.equalsIgnoreCase(BuscarLista.BUSCAR_ALUMO))
 			setTitle("Buscar un alumno");
@@ -84,34 +87,47 @@ public class BuscarDlg extends TitleAreaDialog {
 		Composite container = new Composite(area, SWT.NONE);
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		Label label = new Label(container, SWT.NONE);
+		Group grpDatos = new Group(container, SWT.NONE);
+		grpDatos.setText("Datos");
+		grpDatos.setBounds(10, 10, 491, 154);
+		
+		Label label = new Label(grpDatos, SWT.NONE);
+		label.setLocation(12, 62);
+		label.setSize(52, 15);
 		label.setText("Nombre");
-		label.setBounds(10, 56, 69, 15);
 		
-		txNombre = new Text(container, SWT.BORDER);
-		txNombre.setBounds(10, 72, 151, 20);
+		txNombre = new Text(grpDatos, SWT.BORDER);
+		txNombre.setLocation(82, 58);
+		txNombre.setSize(151, 20);
 		
-		Label label_1 = new Label(container, SWT.NONE);
+		Label label_1 = new Label(grpDatos, SWT.NONE);
+		label_1.setLocation(12, 94);
+		label_1.setSize(51, 15);
 		label_1.setText("Apellidos");
-		label_1.setBounds(187, 56, 69, 15);
 		
-		txApellidos = new Text(container, SWT.BORDER);
-		txApellidos.setBounds(187, 72, 343, 20);
+		txApellidos = new Text(grpDatos, SWT.BORDER);
+		txApellidos.setLocation(82, 91);
+		txApellidos.setSize(343, 20);
 		
-		Label label_2 = new Label(container, SWT.NONE);
-		label_2.setText("C\u00F3digo");
-		label_2.setBounds(10, 10, 39, 15);
-		
-		txCodigo = new Text(container, SWT.BORDER | SWT.READ_ONLY);
-		txCodigo.setEditable(true);
-		txCodigo.setBounds(10, 26, 55, 20);
-		
-		Label label_3 = new Label(container, SWT.NONE);
+		Label label_3 = new Label(grpDatos, SWT.NONE);
+		label_3.setLocation(12, 128);
+		label_3.setSize(51, 15);
 		label_3.setText("Nif");
-		label_3.setBounds(10, 105, 69, 15);
 		
-		txNIF = new Text(container, SWT.BORDER);
-		txNIF.setBounds(10, 122, 105, 20);
+		txNIF = new Text(grpDatos, SWT.BORDER);
+		txNIF.setLocation(82, 124);
+		txNIF.setSize(105, 20);
+		
+		Label label_2 = new Label(grpDatos, SWT.NONE);
+		label_2.setLocation(12, 27);
+		label_2.setSize(39, 15);
+		label_2.setText("C\u00F3digo");
+		
+		txCodigo = new Text(grpDatos, SWT.BORDER | SWT.READ_ONLY);
+		txCodigo.setLocation(82, 25);
+		txCodigo.setSize(55, 20);
+		txCodigo.setEditable(true);
+		grpDatos.setTabList(new Control[]{txCodigo, txNombre, txApellidos, txNIF});
 
 		return area;
 	}
@@ -134,7 +150,7 @@ public class BuscarDlg extends TitleAreaDialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(563, 316);
+		return new Point(517, 318);
 	}
 	
 	protected void buttonPressed(int buttonId)  {
@@ -196,28 +212,4 @@ public class BuscarDlg extends TitleAreaDialog {
 	public void setEncontrados(List encontrados) {
 		this.encontrados = encontrados;
 	}
-	
-
-/*	protected DataBindingContext initDataBindings() {
-		DataBindingContext bindingContext = new DataBindingContext();
-		//
-		IObservableValue observeTextTxNombreObserveWidget = WidgetProperties.text(SWT.Modify).observe(txNombre);
-		IObservableValue nombreAlumnoObserveValue = BeanProperties.value("nombre").observe(alumno);
-		bindingContext.bindValue(observeTextTxNombreObserveWidget, nombreAlumnoObserveValue, null, null);
-		//
-		IObservableValue observeTextTxApellidosObserveWidget = WidgetProperties.text(SWT.Modify).observe(txApellidos);
-		IObservableValue apellidosAlumnoObserveValue = BeanProperties.value("apellidos").observe(alumno);
-		bindingContext.bindValue(observeTextTxApellidosObserveWidget, apellidosAlumnoObserveValue, null, null);
-		//
-		IObservableValue observeTextTxCodigoObserveWidget = WidgetProperties.text(SWT.Modify).observe(txCodigo);
-		IObservableValue idAlumnoAlumnoObserveValue = BeanProperties.value("idAlumno").observe(alumno);
-		bindingContext.bindValue(observeTextTxCodigoObserveWidget, idAlumnoAlumnoObserveValue, null, null);
-		//
-		IObservableValue observeTextTxNIFObserveWidget = WidgetProperties.text(SWT.Modify).observe(txNIF);
-		IObservableValue nifAlumnoObserveValue = BeanProperties.value("nif").observe(alumno);
-		bindingContext.bindValue(observeTextTxNIFObserveWidget, nifAlumnoObserveValue, null, null);
-		//
-		return bindingContext;
-	}
-*/
 }

@@ -43,7 +43,7 @@
         <many-to-one name="profesor" column="IdProfesor"  />
                 
          <set name="matriculas" cascade="delete-orphan" fetch="join"> 
-    		<key column="idMatricula" /> 
+    		<key column="idCurso" /> 
     		<one-to-many class="es.academia.modelo.Matricula" /> 
 		</set>
         

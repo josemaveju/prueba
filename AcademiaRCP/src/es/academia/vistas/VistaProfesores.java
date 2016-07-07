@@ -92,6 +92,7 @@ public class VistaProfesores extends ViewPart implements IConstantes{
 //			sashForm.setForeground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
 			{
 				ExpandBar expandBar = new ExpandBar(sashForm, SWT.BORDER);
+				expandBar.setBackground(SWTResourceManager.getColor(176, 196, 222));
 //				expandBar.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
 //				expandBar.setForeground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
 				{
@@ -106,14 +107,15 @@ public class VistaProfesores extends ViewPart implements IConstantes{
 						{
 							CLabelAca lblNuevoProfesor = new CLabelAca(composite, SWT.NONE);
 							lblNuevoProfesor.addMouseListener(new MouseAdapter() {
-								@Override
+//  Alta de un profesor								
 								public void mouseUp(MouseEvent e) {
-									Alumno alumno = new Alumno();
-									DetalleAlumno dlg = new DetalleAlumno(getSite().getShell());
-									dlg.setAlumno(alumno);
+									Profesor profesor = new Profesor();
+									DetalleProfesor dlg = new DetalleProfesor(getSite().getShell());
+									dlg.setProfesor(profesor);
 									dlg.seleccionarPanel(PANELGENERAL);
 									dlg.setTipoOperacion(TIPOOPERALTA);
 									dlg.open();
+									cargarListaProfesores();
 
 								}
 							});
@@ -123,7 +125,8 @@ public class VistaProfesores extends ViewPart implements IConstantes{
 						{
 							CLabelAca lblDarDeBaja = new CLabelAca(composite, SWT.NONE);
 							lblDarDeBaja.addMouseListener(new MouseAdapter() {
-								@Override
+//  Baja de un profesor								
+
 								public void mouseUp(MouseEvent e) {
 									bajaProfesor();
 								}
@@ -134,7 +137,7 @@ public class VistaProfesores extends ViewPart implements IConstantes{
 						{
 							CLabelAca lblDetalle = new CLabelAca(composite, SWT.NONE);
 							lblDetalle.addMouseListener(new MouseAdapter() {
-								@Override
+//  Detalle de un profesor								
 								public void mouseUp(MouseEvent e) {
 									abrirDetalle(PANELGENERAL);
 								}
@@ -145,7 +148,7 @@ public class VistaProfesores extends ViewPart implements IConstantes{
 						{
 							CLabelAca lblBuscarProfesor = new CLabelAca(composite, SWT.NONE);
 							lblBuscarProfesor.addMouseListener(new MouseAdapter() {
-								@Override
+// Buscar un profesor								
 								public void mouseUp(MouseEvent e) {
 									 abrirBuscar();
 								}
@@ -156,7 +159,7 @@ public class VistaProfesores extends ViewPart implements IConstantes{
 						{
 							CLabelAca lblEnviarEmail = new CLabelAca(composite, SWT.NONE);
 							lblEnviarEmail.addMouseListener(new MouseAdapter() {
-								@Override
+//  Enviar e-mail								
 								public void mouseUp(MouseEvent e) {
 									int idxSelect;
 									if ((idxSelect = table.getSelectionIndex())== -1){
@@ -227,12 +230,12 @@ public class VistaProfesores extends ViewPart implements IConstantes{
 								}
 							});
 							lblVerRecibos.setImage(ResourceManager.getPluginImage("AcademiaRCP", "icons/recibos.png"));
-							lblVerRecibos.setText("Ver recibos");
+							lblVerRecibos.setText("Ver facturas");
 						}
 						{
 							CLabelAca lblGenerarRecibos = new CLabelAca(composite, SWT.NONE);
 							lblGenerarRecibos.setImage(ResourceManager.getPluginImage("AcademiaRCP", "icons/Dinero_16.png"));
-							lblGenerarRecibos.setText("Generar recibos");
+							lblGenerarRecibos.setText("Generar factura");
 						}
 					}
 					xpndtmRecibos.setHeight(xpndtmRecibos.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
@@ -322,6 +325,12 @@ public class VistaProfesores extends ViewPart implements IConstantes{
 						}
 						{
 							Button button = new Button(composite_2, SWT.NONE);
+							button.addSelectionListener(new SelectionAdapter() {
+								@Override
+								public void widgetSelected(SelectionEvent e) {
+									filtroRapido();
+								}
+							});
 							button.setImage(ResourceManager.getPluginImage("AcademiaRCP", "icons/search.gif"));
 							button.setBounds(179, 46, 24, 22);
 						}
@@ -473,26 +482,23 @@ public class VistaProfesores extends ViewPart implements IConstantes{
 	       }
 		else{
 			MessageBox messageBox = new MessageBox(getSite().getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-	        messageBox.setMessage("¿Estás seguro de que quieres dar de baja este alumno?");
-	        messageBox.setText("Baja de alumno");
+	        messageBox.setMessage("¿Estás seguro de que quieres dar de baja este profesor?");
+	        messageBox.setText("Baja de profesor");
 	        int response = messageBox.open();
 	        if (response == SWT.YES){
 				TableItem select = table.getItem(idxSelect);
-				int claveAlumno = new Integer(select.getText(0)).intValue();
+				int claveProfesor = new Integer(select.getText(0)).intValue();
 				try {
-					Profesor al = profesorHome.findById(claveAlumno);
-					al.setFBaja(new Date());
-					profesorHome.persist(al);
+					Profesor pr = profesorHome.findById(claveProfesor);
+					pr.setFBaja(new Date());
+					profesorHome.persist(pr);
 					cargarListaProfesores();
 				}catch (Exception e){
 					GestorErrores.mensajeTexto("Error dando de baja al alumno:\n\n"+e.getMessage(), IConstantes.NIVEL_ERROR);
 					e.printStackTrace();
 				}
-				
 	        }
 		}
-		
-		
 	}
 
 	private void cargarListaProfesores() {

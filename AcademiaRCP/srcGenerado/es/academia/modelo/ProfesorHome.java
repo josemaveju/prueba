@@ -144,7 +144,7 @@ public class ProfesorHome {
         try {
         	Criteria crit =sesion.createCriteria("es.academia.modelo.Profesor");
         	if (instance.getIdProfesor() != null)
-        		crit.add(Restrictions.eq( "idAlumno", instance.getIdProfesor() ));
+        		crit.add(Restrictions.eq( "idProfesor", instance.getIdProfesor() ));
         	if (instance.getNombre() != null)
         		crit.add(Restrictions.like("nombre", "%"+instance.getNombre()+"%"));
         	if (instance.getApellidos()!= null)

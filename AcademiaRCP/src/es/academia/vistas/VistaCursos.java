@@ -29,6 +29,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import es.academia.dialogos.BuscarDlg;
 import es.academia.dialogos.DetalleAlumno;
+import es.academia.dialogos.DetalleCurso;
 import es.academia.dialogos.SendMail;
 import es.academia.modelo.Alumno;
 import es.academia.modelo.AlumnoHome;
@@ -538,8 +539,8 @@ public class VistaCursos extends ViewPart implements IConstantes{
 		else{
 			TableItem select = table.getItem(idxSelect);
 			Integer claveAlumno = new Integer(select.getText(0));
-			DetalleAlumno dlg = new DetalleAlumno(getSite().getShell());
-			dlg.setClaveAlumno(claveAlumno.intValue());
+			DetalleCurso dlg = new DetalleCurso(getSite().getShell());
+			dlg.setClaveCurso(claveAlumno.intValue());
 
 			dlg.seleccionarPanel(opcion);
 			dlg.setTipoOperacion(TIPOOPERMODIFICACION);

@@ -4,7 +4,7 @@ import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
-import es.academia.vistas.VistaAlumnos;
+import es.academia.vistas.VistaCursos;
 
 public class Perspective implements IPerspectiveFactory {
 
@@ -19,8 +19,8 @@ public class Perspective implements IPerspectiveFactory {
 		
 //		layout.addStandaloneView(NavigationView.ID,  false, IPageLayout.LEFT, 0.25f, editorArea);
 		IFolderLayout folder = layout.createFolder("messages", IPageLayout.TOP, 1f, editorArea);
-		folder.addPlaceholder(VistaAlumnos.ID + ":*");
-		folder.addView(VistaAlumnos.ID);
+		folder.addPlaceholder(VistaCursos.ID + ":*");
+		folder.addView(VistaCursos.ID);
 		
 //		layout.getViewLayout(NavigationView.ID).setCloseable(false);
 	}
