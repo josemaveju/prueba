@@ -251,4 +251,13 @@ public class Profesor extends AbstractModelObject implements java.io.Serializabl
 		this.estado = estado;
 	}
 
+	public boolean equals(Object profe){
+		if (profe instanceof Profesor)
+			if (((Profesor)profe).getIdProfesor().intValue()== this.idProfesor.intValue())
+				return true;
+			else
+				return false;
+		else
+			return false;
+	}
 }

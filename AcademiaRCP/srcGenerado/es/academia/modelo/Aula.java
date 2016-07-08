@@ -35,4 +35,15 @@ public class Aula extends AbstractModelObject implements java.io.Serializable {
 		this.descAula = descAula;
 	}
 
+	public boolean equals(Object aula){
+		if (aula instanceof Aula)
+			if (((Aula)aula).getIdAula().intValue()== this.idAula.intValue())
+				return true;
+			else
+				return false;
+		else
+			return false;
+	}
+	
+
 }

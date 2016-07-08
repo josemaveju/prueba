@@ -2,7 +2,11 @@ package es.academia.modelo;
 
 // Generated 21-jul-2014 23:03:03 by Hibernate Tools 3.4.0.CR1
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.naming.InitialContext;
 
@@ -153,6 +157,23 @@ public class CursoHome {
         sesion.getTransaction().commit();
         return result;
     }
+
+	public List<Recibo> listaRecibos(Curso curso) {
+		log.debug("Entrando en ListaRecibo. Empezamos con las iteraciones");
+		Set<Matricula> result= curso.getMatriculas();
+		List<Recibo> salida = new ArrayList<Recibo>();
+		Iterator it = result.iterator();
+		while (it.hasNext()){
+			Set <Recibo> recibos = ((Matricula)it.next()).getRecibos();
+			Iterator it2 = recibos.iterator();
+			int numRec=0;
+			while (it2.hasNext()){
+				salida.add((Recibo) it2.next());
+			}
+		}
+		
+		return salida;
+	}
     
 	
 }

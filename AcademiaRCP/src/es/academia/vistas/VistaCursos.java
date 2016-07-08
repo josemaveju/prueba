@@ -109,12 +109,13 @@ public class VistaCursos extends ViewPart implements IConstantes{
 							lblNuevoCurso.addMouseListener(new MouseAdapter() {
 								@Override
 								public void mouseUp(MouseEvent e) {
-									Alumno alumno = new Alumno();
-									DetalleAlumno dlg = new DetalleAlumno(getSite().getShell());
-									dlg.setAlumno(alumno);
+									Curso curso = new Curso();
+									DetalleCurso dlg = new DetalleCurso(getSite().getShell());
+									dlg.setCurso(curso);
 									dlg.seleccionarPanel(PANELGENERAL);
 									dlg.setTipoOperacion(TIPOOPERALTA);
 									dlg.open();
+									cargarListaCursos();
 
 								}
 							});
@@ -126,7 +127,7 @@ public class VistaCursos extends ViewPart implements IConstantes{
 							lblDarDeBaja.addMouseListener(new MouseAdapter() {
 								@Override
 								public void mouseUp(MouseEvent e) {
-									bajaAlumno();
+									bajaCurso();
 								}
 							});
 							lblDarDeBaja.setImage(ResourceManager.getPluginImage("AcademiaRCP", "icons/Del_alumno_16.png"));
@@ -460,8 +461,8 @@ public class VistaCursos extends ViewPart implements IConstantes{
 		cargarListaCursos();
 	}
 
-	protected void bajaAlumno() {
-		// TODO Auto-generated method stub
+	protected void bajaCurso() {
+
 		int idxSelect;
 		if ((idxSelect = table.getSelectionIndex())== -1){
 			// Mensaje de error
@@ -475,10 +476,10 @@ public class VistaCursos extends ViewPart implements IConstantes{
 	        int response = messageBox.open();
 	        if (response == SWT.YES){
 				TableItem select = table.getItem(idxSelect);
-				int claveAlumno = new Integer(select.getText(0)).intValue();
+				int claveCurso = new Integer(select.getText(0)).intValue();
 				try {
-					Curso al = cursoHome.findById(claveAlumno);
-				//	al.setBaja("S");
+					Curso al = cursoHome.findById(claveCurso);
+//					al.setBaja("S");
 					cursoHome.persist(al);
 					cargarListaCursos();
 				}catch (Exception e){
@@ -489,7 +490,7 @@ public class VistaCursos extends ViewPart implements IConstantes{
 	        }
 		}
 		
-		
+
 	}
 
 	private void cargarListaCursos() {
@@ -538,9 +539,9 @@ public class VistaCursos extends ViewPart implements IConstantes{
 	       }
 		else{
 			TableItem select = table.getItem(idxSelect);
-			Integer claveAlumno = new Integer(select.getText(0));
+			Integer claveCurso = new Integer(select.getText(0));
 			DetalleCurso dlg = new DetalleCurso(getSite().getShell());
-			dlg.setClaveCurso(claveAlumno.intValue());
+			dlg.setClaveCurso(claveCurso.intValue());
 
 			dlg.seleccionarPanel(opcion);
 			dlg.setTipoOperacion(TIPOOPERMODIFICACION);

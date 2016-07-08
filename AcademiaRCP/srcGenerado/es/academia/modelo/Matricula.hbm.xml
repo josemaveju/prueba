@@ -43,7 +43,7 @@
         <many-to-one name="curso" column="IdCurso"  lazy="false"/>
         
          <set name="recibos" cascade="delete-orphan" fetch="join"> 
-    		<key column="idRecibo" /> 
+    		<key column="idMatricula" /> 
     		<one-to-many class="es.academia.modelo.Recibo" /> 
 		</set>
         

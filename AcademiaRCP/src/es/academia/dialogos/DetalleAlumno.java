@@ -352,7 +352,7 @@ public class DetalleAlumno extends Dialog implements IConstantes{
 		lblFechaAlta.setBackground(SWTResourceManager.getColor(248, 248, 255));
 		lblFechaAlta.setBounds(635, 40, 69, 15);
 		
-		txFechaAlta = new DateTime(datosFijos, SWT.BORDER);
+		txFechaAlta = new DateTime(datosFijos, SWT.BORDER | SWT.DROP_DOWN);
 		txFechaAlta.setBounds(635, 57, 112, 21);
 		
 		Label lblTelfMovil2 = new Label(datosFijos, SWT.NONE);
@@ -445,7 +445,7 @@ public class DetalleAlumno extends Dialog implements IConstantes{
 		txemail.setBounds(10, 34, 573, 20);
 		Utilidades.addControlesTexto(txemail,false,100);
 		
-		txFechaNacimiento = new DateTime(grpOtrosDatos, SWT.BORDER);
+		txFechaNacimiento = new DateTime(grpOtrosDatos, SWT.BORDER | SWT.DROP_DOWN);
 		txFechaNacimiento.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {

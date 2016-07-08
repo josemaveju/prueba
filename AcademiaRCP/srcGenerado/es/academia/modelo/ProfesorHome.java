@@ -2,6 +2,8 @@ package es.academia.modelo;
 
 // Generated 21-jul-2014 23:03:03 by Hibernate Tools 3.4.0.CR1
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -176,5 +178,17 @@ public class ProfesorHome {
         sesion.getTransaction().commit();
         return result;
     }
-	
+
+    public List<Integer> listarTodosInteger(){
+    	List<Profesor> lstProfe = listarTodos();
+    	List<Integer> lstInteger = new ArrayList<Integer>();
+    	
+    	Iterator it = lstProfe.iterator();
+    	while (it.hasNext())
+    		lstInteger.add(((Profesor)it.next()).getIdProfesor());
+    
+    	return lstInteger;
+    }
+    
+    
 }

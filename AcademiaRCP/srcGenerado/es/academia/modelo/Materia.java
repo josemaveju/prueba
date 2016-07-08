@@ -33,4 +33,15 @@ public class Materia implements java.io.Serializable {
 		this.descMateria = descMateria;
 	}
 
+	public boolean equals(Object materia){
+		if (materia instanceof Materia)
+			if (((Materia)materia).getIdMateria().intValue()== this.idMateria.intValue())
+				return true;
+			else
+				return false;
+		else
+			return false;
+	}
+	
+	
 }

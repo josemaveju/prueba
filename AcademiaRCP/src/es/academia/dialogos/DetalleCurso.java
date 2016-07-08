@@ -37,9 +37,15 @@ import org.eclipse.swt.widgets.DateTime;
 
 import es.academia.modelo.Alumno;
 import es.academia.modelo.AlumnoHome;
+import es.academia.modelo.Aula;
+import es.academia.modelo.AulaHome;
 import es.academia.modelo.ConocimientoHome;
 import es.academia.modelo.CursoHome;
+import es.academia.modelo.Materia;
+import es.academia.modelo.MateriaHome;
 import es.academia.modelo.Matricula;
+import es.academia.modelo.Profesor;
+import es.academia.modelo.ProfesorHome;
 import es.academia.modelo.Recibo;
 
 import org.eclipse.core.databinding.DataBindingContext;
@@ -62,6 +68,7 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.runtime.IStatus;
@@ -99,6 +106,7 @@ import es.academia.validators.StringToBooleanConverter;
 import org.eclipse.swt.widgets.Combo;
 
 import es.academia.modelo.Curso;
+import org.eclipse.wb.swt.TableViewerColumnSorter;
 
 
 
@@ -169,6 +177,9 @@ public class DetalleCurso extends Dialog implements IConstantes{
 	private CCombo txAula;
 	private CCombo txMateria;
 	private CCombo txProfesor;
+	private ComboViewer txProfesorViewer;
+	private StructuredViewer txMateriaViewer;
+	private ComboViewer txAulaViewer;
 	
 
 	public void setTipoOperacion(String tipoOperacion){
@@ -315,7 +326,7 @@ public class DetalleCurso extends Dialog implements IConstantes{
 		lblFechaAlta.setBackground(SWTResourceManager.getColor(248, 248, 255));
 		lblFechaAlta.setBounds(308, 35, 69, 15);
 		
-		txFInicio = new DateTime(datosFijos, SWT.BORDER);
+		txFInicio = new DateTime(datosFijos, SWT.BORDER | SWT.DROP_DOWN);
 		txFInicio.setBounds(308, 52, 112, 21);
 		
 		CLabel lblNewLabel = new CLabel(datosFijos, SWT.NONE);
@@ -337,7 +348,7 @@ public class DetalleCurso extends Dialog implements IConstantes{
 		lblFechaFin.setBackground(SWTResourceManager.getColor(248, 248, 255));
 		lblFechaFin.setBounds(448, 35, 69, 15);
 		
-		txFFin = new DateTime(datosFijos, SWT.BORDER);
+		txFFin = new DateTime(datosFijos, SWT.BORDER | SWT.DROP_DOWN);
 		txFFin.setBounds(448, 52, 112, 21);
 		
 		central = new Composite(container, SWT.NONE);
@@ -375,11 +386,55 @@ public class DetalleCurso extends Dialog implements IConstantes{
 		txAula.setVisibleItemCount(10);
 		txAula.setEditable(false);
 		txAula.setBounds(350, 78, 206, 20);
+	// Rellenar el Combo
+		txAulaViewer = new ComboViewer(txAula);
+		try {
+			txAulaViewer.setContentProvider(new ArrayContentProvider().getInstance());
+			txAulaViewer.setLabelProvider(new LabelProvider() {
+
+		        public String getText(Object element) {
+		            if (element instanceof Aula) {
+		            		return ((Aula)element).getDescAula();
+		            }
+		            return super.getText(element);
+		        }
+		    });
+			
+			AulaHome ch = new AulaHome();
+			txAulaViewer.setInput(ch.listarTodos());
+			
+		}catch (RuntimeException re){
+			re.printStackTrace();
+			GestorErrores.mensajeTexto("Error cargando lista de aulas.\n\n" + 
+		                    re.getMessage()+"\n" + re.getCause(), NIVEL_ERROR);
+		}
 		
 		txMateria = new CCombo(grpDomicilio, SWT.BORDER | SWT.READ_ONLY);
 		txMateria.setVisibleItemCount(10);
 		txMateria.setEditable(false);
 		txMateria.setBounds(10, 78, 307, 20);
+	  // Rellenar el Combo
+		txMateriaViewer = new ComboViewer(txMateria);
+		try {
+			txMateriaViewer.setContentProvider(new ArrayContentProvider().getInstance());
+			txMateriaViewer.setLabelProvider(new LabelProvider() {
+
+		        public String getText(Object element) {
+		            if (element instanceof Materia) {
+		            		return ((Materia)element).getDescMateria();
+		            }
+		            return super.getText(element);
+		        }
+		    });
+			
+			MateriaHome ch = new MateriaHome();
+			txMateriaViewer.setInput(ch.listarTodos());
+			
+		}catch (RuntimeException re){
+			re.printStackTrace();
+			GestorErrores.mensajeTexto("Error cargando lista de materias.\n\n" + 
+		                    re.getMessage()+"\n" + re.getCause(), NIVEL_ERROR);
+		}
 		
 		Label lblMateria = new Label(grpDomicilio, SWT.NONE);
 		lblMateria.setText("Materia");
@@ -393,6 +448,35 @@ public class DetalleCurso extends Dialog implements IConstantes{
 		txProfesor.setVisibleItemCount(10);
 		txProfesor.setEditable(false);
 		txProfesor.setBounds(10, 37, 546, 20);
+
+   // Rellenar el Combo
+		txProfesorViewer = new ComboViewer(txProfesor);
+		try {
+			txProfesorViewer.setContentProvider(new ArrayContentProvider().getInstance());
+			txProfesorViewer.setLabelProvider(new LabelProvider() {
+
+		        public String getText(Object element) {
+		            if (element instanceof Profesor) {
+		            	String nombre =((Profesor)element).getNombre();
+		            	String apellidos = ((Profesor)element).getApellidos();
+		            	if (apellidos == null)
+		            		apellidos = "";
+		            	
+		            	return nombre + " " + apellidos;
+		            }
+		            return super.getText(element);
+		        }
+		    });
+			
+			ProfesorHome ch = new ProfesorHome();
+			txProfesorViewer.setInput(ch.listarTodos());
+			
+		}catch (RuntimeException re){
+			re.printStackTrace();
+			GestorErrores.mensajeTexto("Error cargando lista de profesores.\n\n" + 
+		                    re.getMessage()+"\n" + re.getCause(), NIVEL_ERROR);
+		}
+
 		
 		Label lblProfesor = new Label(grpDomicilio, SWT.NONE);
 		lblProfesor.setText("Profesor");
@@ -409,7 +493,7 @@ public class DetalleCurso extends Dialog implements IConstantes{
 		lblMasAlumnos.setSize(102, 15);
 		lblMasAlumnos.setText("Capacidad m\u00E1xima");
 		
-		txMaxAlumnos = new Text(grpDatosEconomicos, SWT.BORDER);
+		txMaxAlumnos = new Text(grpDatosEconomicos, SWT.BORDER | SWT.RIGHT);
 		txMaxAlumnos.setLocation(10, 42);
 		txMaxAlumnos.setSize(102, 20);
 		Utilidades.addControlesTexto(txMaxAlumnos,false,30);
@@ -419,26 +503,26 @@ public class DetalleCurso extends Dialog implements IConstantes{
 		lblHorasSemana.setSize(75, 15);
 		lblHorasSemana.setText("Horas/semana");
 		
-		txHorasSemana = new Text(grpDatosEconomicos, SWT.BORDER);
+		txHorasSemana = new Text(grpDatosEconomicos, SWT.BORDER | SWT.RIGHT);
 		txHorasSemana.setLocation(148, 42);
 		txHorasSemana.setSize(83, 20);
 		Utilidades.addControlesTexto(txHorasSemana,false,5);
 		
-		txImpMatricula = new Text(grpDatosEconomicos, SWT.BORDER);
+		txImpMatricula = new Text(grpDatosEconomicos, SWT.BORDER | SWT.RIGHT);
 		txImpMatricula.setBounds(10, 95, 89, 20);
 		
 		Label lblImpMatricula = new Label(grpDatosEconomicos, SWT.NONE);
 		lblImpMatricula.setText("Importe matr\u00EDcula");
 		lblImpMatricula.setBounds(10, 80, 84, 15);
 		
-		txImpHora = new Text(grpDatosEconomicos, SWT.BORDER);
+		txImpHora = new Text(grpDatosEconomicos, SWT.BORDER | SWT.RIGHT);
 		txImpHora.setBounds(148, 95, 89, 20);
 		
 		Label LblImporteHora = new Label(grpDatosEconomicos, SWT.NONE);
 		LblImporteHora.setText("Importe por hora");
 		LblImporteHora.setBounds(148, 81, 84, 15);
 		
-		txImpMes = new Text(grpDatosEconomicos, SWT.BORDER);
+		txImpMes = new Text(grpDatosEconomicos, SWT.BORDER | SWT.RIGHT);
 		txImpMes.setBounds(263, 95, 89, 20);
 		
 		Label LblImporteMes = new Label(grpDatosEconomicos, SWT.NONE);
@@ -463,6 +547,16 @@ public class DetalleCurso extends Dialog implements IConstantes{
 		tbMatriculas.setBounds(10, 78, 593, 281);
 		
 		TableViewerColumn tvMatCodigo = new TableViewerColumn(tablaMatriculas, SWT.NONE);
+		new TableViewerColumnSorter(tvMatCodigo) {
+			protected Object getValue(Object o) {
+				// TODO remove this method, if your EditingSupport returns value
+				return ((Matricula)o).getIdMatricula();
+			}
+		};
+		
+		
+		
+		
 		TableColumn tblclmnCdigo = tvMatCodigo.getColumn();
 		tblclmnCdigo.setAlignment(SWT.RIGHT);
 		tblclmnCdigo.setWidth(50);
@@ -470,18 +564,28 @@ public class DetalleCurso extends Dialog implements IConstantes{
 		
 		TableViewerColumn tvMatDescripcion = new TableViewerColumn(tablaMatriculas, SWT.NONE);
 		TableColumn tblclmnNombre = tvMatDescripcion.getColumn();
-		tblclmnNombre.setWidth(285);
-		tblclmnNombre.setText("Nombre");
-		
-		TableViewerColumn tvMatFFin = new TableViewerColumn(tablaMatriculas, SWT.NONE);
-		TableColumn tblclmnNIF = tvMatFFin.getColumn();
-		tblclmnNIF.setWidth(105);
-		tblclmnNIF.setText("NIF");
+		tblclmnNombre.setWidth(200);
+		tblclmnNombre.setText("Alumno");
 		
 		TableViewerColumn tvMatImporte = new TableViewerColumn(tablaMatriculas, SWT.NONE);
 		TableColumn tblclmnTelefono = tvMatImporte.getColumn();
-		tblclmnTelefono.setWidth(105);
-		tblclmnTelefono.setText("Tel\u00E9fono");
+		tblclmnTelefono.setWidth(90);
+		tblclmnTelefono.setText("Fijo");
+		
+		TableViewerColumn tableViewerColumn_9 = new TableViewerColumn(tablaMatriculas, SWT.NONE);
+		TableColumn tblclmnMvil = tableViewerColumn_9.getColumn();
+		tblclmnMvil.setWidth(90);
+		tblclmnMvil.setText("M\u00F3vil");
+		
+		TableViewerColumn tableViewerColumn_7 = new TableViewerColumn(tablaMatriculas, SWT.NONE);
+		TableColumn tblclmnFDesde_1 = tableViewerColumn_7.getColumn();
+		tblclmnFDesde_1.setWidth(79);
+		tblclmnFDesde_1.setText("F. Desde");
+		
+		TableViewerColumn tableViewerColumn_8 = new TableViewerColumn(tablaMatriculas, SWT.NONE);
+		TableColumn tblclmnFHasta_1 = tableViewerColumn_8.getColumn();
+		tblclmnFHasta_1.setWidth(79);
+		tblclmnFHasta_1.setText("F. Hasta");
 
 		
 		//Definición del filtro
@@ -714,16 +818,27 @@ public class DetalleCurso extends Dialog implements IConstantes{
 		// Comprobamos si está cargada la lista de matriculas:
 		
 		
-
+// Lista de matrículas
 		ObservableSetContentProvider contentProviderM = new ObservableSetContentProvider();
 		tablaMatriculas.setContentProvider(contentProviderM);
 		tablaMatriculas.setLabelProvider( new MatriculaTableLabelProvider(
 		     Properties.observeEach( contentProviderM.getKnownElements(), 
 			    	BeanProperties.values(new String[]  {
-			    			 "idMatricula", "alumno.nombre","alumno.nif","alumno.telefono"} ) )
+			    			 "idMatricula", "alumno.nombre","alumno.telFijo","alumno.telMovil","FDesde","FHasta"} ) )
 		));
 		tablaMatriculas.setInput(BeansObservables.observeSet(curso,"matriculas", Matricula.class));
 
+// Lista de recibos de una matricula		
+		ObservableListContentProvider contentProvider = new ObservableListContentProvider();
+		tablaRecibos.setContentProvider(contentProvider);
+		tablaRecibos.setLabelProvider( new ReciboTableLabelProvider(
+		     Properties.observeEach( contentProvider.getKnownElements(), 
+			    	BeanProperties.values(new String[]  {
+                    "numRecibo", "descSerieRecibo","alulmno.nombre","FDesde","FHasta",
+                    "impTotal","pagado"} ) )
+		));
+		tablaRecibos.setInput(BeansObservables.observeList(curso,PANELRECIBOS, Recibo.class));
+		
 	}
 
 	/**
@@ -825,9 +940,8 @@ public class DetalleCurso extends Dialog implements IConstantes{
 					return Integer.toString(recibo.getNumRecibo());
 				case 1:
 					return recibo.getDescSerieRecibo();
-							//TAConstants.DATETIME_FORMAT.format(recibo.getDate());
 				case 2:
-					return recibo.getNombreCurso();
+					return recibo.getMatricula().getAlumno().getNombre()+" "+recibo.getMatricula().getAlumno().getApellidos();
 				case 3:
 					return sdf.format(recibo.getFDesde());					
 				case 4:
@@ -847,11 +961,11 @@ public class DetalleCurso extends Dialog implements IConstantes{
 	class MatriculaTableLabelProvider extends ObservableMapLabelProvider implements ITableLabelProvider {
 
 /*		0: "idMatricula", 
- * 		1: "nombreCurso",
- * 		2: "agnoCurso",
- * 		3: "FDesde",
- * 		4: "FHasta",
- *		5: "impMes"
+ * 		1: "Nombre aLumno",
+ * 		2: "NIF Alumno",
+ * 		3: "Teléfono",
+ * 		4: "FDesde",
+ * 		5: "FHasta",
 */
 		public MatriculaTableLabelProvider(IObservableMap[] iObservableMaps) {
 			super(iObservableMaps);
@@ -860,6 +974,7 @@ public class DetalleCurso extends Dialog implements IConstantes{
 		@Override
 		public String getColumnText(Object obj, int index) {
 			Matricula matricula = (Matricula) obj;
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 			
 			
 			switch (index) {
@@ -869,9 +984,13 @@ public class DetalleCurso extends Dialog implements IConstantes{
 					return matricula.getAlumno().getNombre()+" "+matricula.getAlumno().getApellidos();
 							//TAConstants.DATETIME_FORMAT.format(recibo.getDate());
 				case 2:
-					return matricula.getAlumno().getNif();
+					return matricula.getAlumno().getTelFijo();
 				case 3:
 					return matricula.getAlumno().getTelMovil();				
+				case 4:
+					return sdf.format(matricula.getFDesde());				
+				case 5:
+					return sdf.format(matricula.getFHasta());				
 				default:
 					throw new IllegalArgumentException("Central Panel Mesage Table does not have column index:" + index);
 			}
@@ -907,15 +1026,15 @@ public class DetalleCurso extends Dialog implements IConstantes{
 		strategy_2.setAfterConvertValidator(new NoVacioValidator());
 		ffinBinding = bindingContext.bindValue(observeSelectionTxFFinObserveWidget, fFinCursoObserveValue, null, strategy_2);
 		//
-		IObservableValue observeSelectionTxAulaObserveWidget = WidgetProperties.selection().observe(txAula);
+		IObservableValue observeSelectionTxAulaObserveWidget = ViewersObservables.observeSingleSelection(txAulaViewer);
 		IObservableValue aulaCursoObserveValue = BeanProperties.value("aula").observe(curso);
 		bindingContext.bindValue(observeSelectionTxAulaObserveWidget, aulaCursoObserveValue, null, null);
 		//
-		IObservableValue observeSelectionTxMateriaObserveWidget = WidgetProperties.selection().observe(txMateria);
+		IObservableValue observeSelectionTxMateriaObserveWidget = ViewersObservables.observeSingleSelection(txMateriaViewer);
 		IObservableValue materiaCursoObserveValue = BeanProperties.value("materia").observe(curso);
 		bindingContext.bindValue(observeSelectionTxMateriaObserveWidget, materiaCursoObserveValue, null, null);
 		//
-		IObservableValue observeSelectionTxProfesorObserveWidget = WidgetProperties.selection().observe(txProfesor);
+		IObservableValue observeSelectionTxProfesorObserveWidget = ViewersObservables.observeSingleSelection(txProfesorViewer);
 		IObservableValue profesorCursoObserveValue = BeanProperties.value("profesor").observe(curso);
 		UpdateValueStrategy strategy_3 = new UpdateValueStrategy();
 		strategy_3.setAfterConvertValidator(new NoVacioValidator());
