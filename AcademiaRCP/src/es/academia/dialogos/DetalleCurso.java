@@ -379,6 +379,20 @@ public class DetalleCurso extends Dialog implements IConstantes{
 		lblDireccin.setBounds(350, 63, 69, 15);
 		
 		Button btnMasAula = new Button(grpDomicilio, SWT.NONE);
+		btnMasAula.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Integer claveAula;
+				claveAula = new Integer(-1);
+
+				DetalleAula dlg = new DetalleAula(getShell());
+				dlg.setClaveAula(claveAula.intValue());
+			
+				dlg.open();
+				txAulaViewer.refresh();
+				
+			}
+		});
 		btnMasAula.setImage(ResourceManager.getPluginImage("AcademiaRCP", "icons/mas.gif"));
 		btnMasAula.setBounds(562, 77, 21, 21);
 		
