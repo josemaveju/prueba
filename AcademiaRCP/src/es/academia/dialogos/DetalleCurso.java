@@ -401,7 +401,7 @@ public class DetalleCurso extends Dialog implements IConstantes{
 		txAula.setEditable(false);
 		txAula.setBounds(350, 78, 206, 20);
 	// Rellenar el Combo
-		txAulaViewer = new ComboViewer(txAula);
+		txAulaViewer = new ComboViewer(txAula); 
 		try {
 			txAulaViewer.setContentProvider(new ArrayContentProvider().getInstance());
 			txAulaViewer.setLabelProvider(new LabelProvider() {
