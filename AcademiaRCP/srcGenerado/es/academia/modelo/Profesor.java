@@ -3,7 +3,10 @@ package es.academia.modelo;
 // Generated 21-jul-2014 23:03:01 by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -36,6 +39,8 @@ public class Profesor extends AbstractModelObject implements java.io.Serializabl
 	private Date FAlta;
 	private Date FBaja;
 	private String estado;
+	private Set<Curso> cursos = new HashSet<Curso>();  
+	
 
 	public Profesor() {
 	}
@@ -251,9 +256,18 @@ public class Profesor extends AbstractModelObject implements java.io.Serializabl
 		this.estado = estado;
 	}
 
+	public Set<Curso> getCursos() {
+		return cursos;
+	}
+
+	public void setCursos(Set<Curso> cursos) {
+		this.cursos = cursos;
+	}
+
 	public boolean equals(Object profe){
-		if (profe instanceof Profesor)
-			if (((Profesor)profe).getIdProfesor().intValue()== this.idProfesor.intValue())
+		if (profe != null && profe instanceof Profesor)
+			if ( ((Profesor)profe).getIdProfesor()!= null &&
+			((Profesor)profe).getIdProfesor().intValue()== this.idProfesor.intValue())
 				return true;
 			else
 				return false;

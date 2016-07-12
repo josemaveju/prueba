@@ -12,6 +12,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.wb.swt.SWTResourceManager;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 
 public class GenerarRecibosPage extends WizardPage {
 	private Table table;
@@ -55,14 +57,6 @@ public class GenerarRecibosPage extends WizardPage {
 		tblclmnNewColumn.setWidth(100);
 		tblclmnNewColumn.setText("Importe");
 		
-		Button btnGenerarRecibo = new Button(container, SWT.NONE);
-		btnGenerarRecibo.setBounds(10, 318, 98, 23);
-		btnGenerarRecibo.setText("Generar Recibos");
-		
-		Button btnEmitirRecibo = new Button(container, SWT.NONE);
-		btnEmitirRecibo.setText("Emitir Recibos");
-		btnEmitirRecibo.setBounds(124, 318, 80, 23);
-		
 		Label lblTotalImporte = new Label(container, SWT.NONE);
 		lblTotalImporte.setFont(SWTResourceManager.getFont("Tahoma", 8, SWT.BOLD));
 		lblTotalImporte.setBounds(366, 328, 107, 13);
@@ -71,6 +65,14 @@ public class GenerarRecibosPage extends WizardPage {
 		txImporteTotal = new Text(container, SWT.BORDER | SWT.READ_ONLY | SWT.RIGHT);
 		txImporteTotal.setEditable(false);
 		txImporteTotal.setBounds(474, 322, 98, 19);
+		
+		Button btnGenerarYEmitir = new Button(container, SWT.RADIO);
+		btnGenerarYEmitir.setSelection(true);
+		btnGenerarYEmitir.setBounds(10, 326, 107, 16);
+		btnGenerarYEmitir.setText("Generar y emitir");
+		
+		Button btnSloGenerar = new Button(container, SWT.RADIO);
+		btnSloGenerar.setBounds(123, 326, 83, 16);
+		btnSloGenerar.setText("S\u00F3lo generar");
 	}
-
 }

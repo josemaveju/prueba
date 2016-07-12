@@ -10,8 +10,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Text;
 
-import es.academia.modelo.Aula;
-import es.academia.modelo.AulaHome;
+import es.academia.modelo.MateriaHome;
+import es.academia.modelo.Materia;
 import es.academia.modelo.Serierecibo;
 import es.academia.modelo.SeriereciboHome;
 import es.academia.utils.GestorErrores;
@@ -24,33 +24,34 @@ import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.swt.widgets.Group;
 
-public class DetalleAula extends Dialog implements IConstantes{
+public class DetalleMateria extends Dialog implements IConstantes{
 	private DataBindingContext m_bindingContext;
-	private Text txNumAula;
-	private Text txDescAula;
+	private Text txIdMateria;
+	private Text txDescMateria;
 	
 	/**
 	 * @wbp.nonvisual location=38,179
 	 */
-	private  Aula aula ;
-	private  int claveAula;
+	private  Materia materia ;
+	private  int claveMateria;
 
 
 	/**
 	 * Create the dialog.
 	 * @param parentShell
 	 */
-	public DetalleAula(Shell parentShell) {
+	public DetalleMateria(Shell parentShell) {
 		super(parentShell);
+	
 	}
 
-	protected void configureShell(Shell newShell) {
-      super.configureShell(newShell);
-      newShell.setText("Mantenimiento de aulas");
-	}	
-	
-	public void setClaveAula(int clave){
-		this.claveAula = clave;
+   protected void configureShell(Shell newShell) {
+	      super.configureShell(newShell);
+	      newShell.setText("Mantenimiento de materias");
+	   }	
+   
+	public void setClaveMateria(int clave){
+		this.claveMateria = clave;
 	}
 
 	/**
@@ -62,31 +63,31 @@ public class DetalleAula extends Dialog implements IConstantes{
 		Composite container = (Composite) super.createDialogArea(parent);
 		container.setLayout(null);
 		
-		Group grpAulas = new Group(container, SWT.NONE);
-		grpAulas.setText("Aulas");
-		grpAulas.setBounds(10, 13, 403, 117);
+		Group grpMaterias = new Group(container, SWT.NONE);
+		grpMaterias.setText("Materias");
+		grpMaterias.setBounds(10, 13, 403, 117);
 		
-		Label lblNewLabel = new Label(grpAulas, SWT.NONE);
-		lblNewLabel.setLocation(10, 35);
-		lblNewLabel.setSize(61, 15);
-		lblNewLabel.setText("Num. aula:");
+		Label lblIdMateria = new Label(grpMaterias, SWT.NONE);
+		lblIdMateria.setLocation(10, 35);
+		lblIdMateria.setSize(61, 15);
+		lblIdMateria.setText("Id. Materia");
 		
-		txNumAula = new Text(grpAulas, SWT.BORDER);
-		txNumAula.setEnabled(false);
-		txNumAula.setLocation(76, 31);
-		txNumAula.setSize(76, 21);
-		txNumAula.setEditable(false);
+		txIdMateria = new Text(grpMaterias, SWT.BORDER);
+		txIdMateria.setEnabled(false);
+		txIdMateria.setLocation(76, 31);
+		txIdMateria.setSize(76, 21);
+		txIdMateria.setEditable(false);
 		
-		Label lblDescirpcin = new Label(grpAulas, SWT.NONE);
+		Label lblDescirpcin = new Label(grpMaterias, SWT.NONE);
 		lblDescirpcin.setLocation(10, 73);
 		lblDescirpcin.setSize(66, 15);
 		lblDescirpcin.setText("Descripci\u00F3n:");
 		
-		txDescAula = new Text(grpAulas, SWT.BORDER);
-		txDescAula.setLocation(77, 70);
-		txDescAula.setSize(301, 21);
-		Utilidades.addControlesTexto(txDescAula,false,8);
-		grpAulas.setTabList(new Control[]{txNumAula, txDescAula});
+		txDescMateria = new Text(grpMaterias, SWT.BORDER);
+		txDescMateria.setLocation(77, 70);
+		txDescMateria.setSize(301, 21);
+		Utilidades.addControlesTexto(txDescMateria,false,8);
+		grpMaterias.setTabList(new Control[]{txIdMateria, txDescMateria});
 		
 		setBean();
 		return container;
@@ -94,11 +95,11 @@ public class DetalleAula extends Dialog implements IConstantes{
 
 	private void setBean() {
 		// TODO Auto-generated method stub
-		if (claveAula<0)
-			aula= new Aula();
+		if (claveMateria<0)
+			materia= new Materia();
 		else{
-			AulaHome srh = new AulaHome();
-			aula = srh.findById(claveAula);
+			MateriaHome srh = new MateriaHome();
+			materia = srh.findById(claveMateria);
 		}
 	}
 
@@ -122,8 +123,8 @@ public class DetalleAula extends Dialog implements IConstantes{
 			String errores = comprobarDatos();
 			if (errores.equalsIgnoreCase("")){
 //				GestorErrores.mensajeTexto("Todo correcto", NIVEL_INFO);
-				AulaHome srh = new AulaHome();
-				srh.persist(aula);
+				MateriaHome srh = new MateriaHome();
+				srh.persist(materia);
 				close();
 			}
 			else {
@@ -140,7 +141,7 @@ public class DetalleAula extends Dialog implements IConstantes{
 		// TODO Auto-generated method stub
 		String errores="";
 		
-		if (txDescAula.getText().equals("")){
+		if (txDescMateria.getText().equals("")){
 			errores = errores +"El campo Descripción está vacío";
 		}
 						
@@ -158,12 +159,12 @@ public class DetalleAula extends Dialog implements IConstantes{
 	protected DataBindingContext initDataBindings() {
 		DataBindingContext bindingContext = new DataBindingContext();
 		//
-		IObservableValue observeTextTxNumSerieObserveWidget = WidgetProperties.text(SWT.Modify).observe(txNumAula);
-		IObservableValue idSerieSeriereciboObserveValue = BeanProperties.value("idAula").observe(aula);
+		IObservableValue observeTextTxNumSerieObserveWidget = WidgetProperties.text(SWT.Modify).observe(txIdMateria);
+		IObservableValue idSerieSeriereciboObserveValue = BeanProperties.value("idMateria").observe(materia);
 		bindingContext.bindValue(observeTextTxNumSerieObserveWidget, idSerieSeriereciboObserveValue, null, null);
 		//
-		IObservableValue observeTextTxDescSerieObserveWidget = WidgetProperties.text(SWT.Modify).observe(txDescAula);
-		IObservableValue descSerieSeriereciboObserveValue = BeanProperties.value("descAula").observe(aula);
+		IObservableValue observeTextTxDescSerieObserveWidget = WidgetProperties.text(SWT.Modify).observe(txDescMateria);
+		IObservableValue descSerieSeriereciboObserveValue = BeanProperties.value("descMateria").observe(materia);
 		bindingContext.bindValue(observeTextTxDescSerieObserveWidget, descSerieSeriereciboObserveValue, null, null);
 		//
 		return bindingContext;

@@ -65,5 +65,11 @@
         <property name="estado" type="string">
             <column name="Estado" length="1" />
         </property>
+        
+        <set name="cursos" cascade="delete-orphan" fetch="join"> 
+    		<key column="idProfesor" /> 
+    		<one-to-many class="es.academia.modelo.Curso" /> 
+		</set>
+        
     </class>
 </hibernate-mapping>

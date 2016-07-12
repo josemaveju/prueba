@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.DateTime;
 import es.academia.modelo.Alumno;
 import es.academia.modelo.AlumnoHome;
 import es.academia.modelo.ConocimientoHome;
+import es.academia.modelo.Curso;
 import es.academia.modelo.Matricula;
 import es.academia.modelo.Profesor;
 import es.academia.modelo.ProfesorHome;
@@ -91,6 +92,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.widgets.CoolBar;
 import org.eclipse.swt.widgets.CoolItem;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Canvas;
@@ -532,18 +534,18 @@ public class DetalleProfesor extends Dialog implements IConstantes{
 		tblclmnFFin.setWidth(83);
 		tblclmnFFin.setText("F. Fin");
 		
-		TableViewerColumn tvMatImporte = new TableViewerColumn(tablaMatriculas, SWT.NONE);
-		TableColumn tblclmnImporteRecibo = tvMatImporte.getColumn();
-		tblclmnImporteRecibo.setAlignment(SWT.RIGHT);
-		tblclmnImporteRecibo.setWidth(91);
-		tblclmnImporteRecibo.setText("Importe recibo");
+		TableViewerColumn tvHorasSemana = new TableViewerColumn(tablaMatriculas, SWT.NONE);
+		TableColumn tblclmnHorasSemana = tvHorasSemana.getColumn();
+		tblclmnHorasSemana.setAlignment(SWT.RIGHT);
+		tblclmnHorasSemana.setWidth(91);
+		tblclmnHorasSemana.setText("Horas / semana");
 
 		
 		//Definición del filtro
 	    filtroActivas = new ViewerFilter(){
 		public boolean select (Viewer visor, Object objetoPadre, Object objeto){
-			Matricula mat = (Matricula)objeto;
-			Date fechaFin = mat.getFHasta();
+			Curso mat = (Curso)objeto;
+			Date fechaFin = mat.getFFin();
 			Date hoy = new Date();
 			
 			if ( fechaFin.before(hoy) )
@@ -593,6 +595,12 @@ public class DetalleProfesor extends Dialog implements IConstantes{
 		coolItem_1.setControl(toolBar_1);
 		
 		ToolItem tltmVerDetalle = new ToolItem(toolBar_1, SWT.NONE);
+		tltmVerDetalle.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				// Detalle del Curso
+				abrirDetalleCurso(PANELGENERAL);
+			}
+		});
 		tltmVerDetalle.setToolTipText("Ver detalle de la matricula seleccionada");
 		tltmVerDetalle.setText("Ver detalle");
 		tltmVerDetalle.setImage(ResourceManager.getPluginImage("AcademiaRCP", "icons/factura_16.png"));
@@ -746,19 +754,20 @@ public class DetalleProfesor extends Dialog implements IConstantes{
 		profesor = ah.findById(claveProfesor);
 		log.debug("Profesor instanciado");
 
-		// Enlazar con la lista de matriculas del alumno	
-/*			
+
+// Lista de Cursos
+			
 		ObservableSetContentProvider contentProviderM = new ObservableSetContentProvider();
 		tablaMatriculas.setContentProvider(contentProviderM);
 		tablaMatriculas.setLabelProvider( new MatriculaTableLabelProvider(
 		     Properties.observeEach( contentProviderM.getKnownElements(), 
 			    	BeanProperties.values(new String[]  {
-			    			 "idMatricula", "nombreCurso","agnoCurso","FDesde","FHasta",
-	                          "impMes"} ) )
+			    			 "idCurso", "nombreCurso","agnoCurso","FDesde","FHasta",
+	                          "horasSemana"} ) )
 		));
-		tablaMatriculas.setInput(BeansObservables.observeSet(profesor,"matriculas", Matricula.class));
+		tablaMatriculas.setInput(BeansObservables.observeSet(profesor,"cursos", Matricula.class));
 
-		// Enlazar con la lista de recibos del alumno	
+/*		// Enlazar con la lista de recibos del alumno	
 		ObservableListContentProvider contentProvider = new ObservableListContentProvider();
 		tablaRecibos.setContentProvider(contentProvider);
 		tablaRecibos.setLabelProvider( new ReciboTableLabelProvider(
@@ -772,6 +781,29 @@ public class DetalleProfesor extends Dialog implements IConstantes{
 
 	}
 
+	
+	private void abrirDetalleCurso( String opcion){
+		int idxSelect;
+		if ((idxSelect = tbMatriculas.getSelectionIndex())== -1){
+			// Mensaje de error
+			GestorErrores.mensajeTexto("No hay nada seleccionado", NIVEL_INFO);
+			
+	       }
+		else{
+			TableItem select = tbMatriculas.getItem(idxSelect);
+			Integer claveCurso = new Integer(select.getText(0));
+			DetalleCurso dlg = new DetalleCurso(getShell());
+			dlg.setClaveCurso(claveCurso.intValue());
+
+			dlg.seleccionarPanel(opcion);
+			dlg.setTipoOperacion(TIPOOPERMODIFICACION);
+			dlg.open();
+	//		cargarListaCursos();
+		}
+
+	}
+	
+	
 	/**
 	 * Create contents of the button bar.
 	 * @param parent
@@ -845,7 +877,7 @@ public class DetalleProfesor extends Dialog implements IConstantes{
 	
    protected void configureShell(Shell shell) {
 	      super.configureShell(shell);
-	      shell.setText("Mantenimiento de alumnos");
+	      shell.setText("Mantenimiento de profesores");
 	   }
 	
 	private void añadirDecorations(){
@@ -907,12 +939,12 @@ public class DetalleProfesor extends Dialog implements IConstantes{
 	
 	class MatriculaTableLabelProvider extends ObservableMapLabelProvider implements ITableLabelProvider {
 
-/*		0: "idMatricula", 
+/*		0: "idcurso", 
  * 		1: "nombreCurso",
  * 		2: "agnoCurso",
  * 		3: "FDesde",
  * 		4: "FHasta",
- *		5: "impMes"
+ *		5: "horasSemana"
 */
 		public MatriculaTableLabelProvider(IObservableMap[] iObservableMaps) {
 			super(iObservableMaps);
@@ -920,29 +952,28 @@ public class DetalleProfesor extends Dialog implements IConstantes{
 
 		@Override
 		public String getColumnText(Object obj, int index) {
-			Matricula matricula = (Matricula) obj;
+			Curso curso = (Curso) obj;
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 			
 			DecimalFormatSymbols dcfs = new DecimalFormatSymbols(new Locale("es","ES"));
 			dcfs.setDecimalSeparator(',');
 			dcfs.setGroupingSeparator('.'); 
-			DecimalFormat dcmf= new DecimalFormat("###,##0.00",dcfs);
+			DecimalFormat dcmf= new DecimalFormat("###,##0",dcfs);
 			
 			switch (index) {
 				case 0:
-					return Integer.toString(matricula.getIdMatricula());
+					return Integer.toString(curso.getIdCurso());
 				case 1:
-					return matricula.getNombreCurso();
+					return curso.getDescCurso();
 							//TAConstants.DATETIME_FORMAT.format(recibo.getDate());
 				case 2:
-					return matricula.getAgnoCurso();
+					return curso.getAnnoCurso();
 				case 3:
-					return sdf.format(matricula.getFDesde());					
+					return sdf.format(curso.getFInicio());					
 				case 4:
-					return sdf.format(matricula.getFHasta());
+					return sdf.format(curso.getFFin());
 				case 5:
-					log.debug("valor que hay que formatear: " +matricula.getImpMes().floatValue());
-					return dcmf.format(matricula.getImpMes().floatValue());
+					return dcmf.format(curso.getHorasSemana().floatValue());
 				default:
 					throw new IllegalArgumentException("Central Panel Mesage Table does not have column index:" + index);
 			}

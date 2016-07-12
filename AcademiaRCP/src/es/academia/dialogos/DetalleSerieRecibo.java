@@ -43,6 +43,11 @@ public class DetalleSerieRecibo extends Dialog implements IConstantes{
 		super(parentShell);
 	}
 
+	   protected void configureShell(Shell newShell) {
+		      super.configureShell(newShell);
+		      newShell.setText("Mantenimiento de series recibo");
+		   }	
+	   
 	
 	public void setClaveSerie(int clave){
 		this.claveSerie = clave;

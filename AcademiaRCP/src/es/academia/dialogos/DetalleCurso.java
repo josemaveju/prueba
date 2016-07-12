@@ -374,28 +374,6 @@ public class DetalleCurso extends Dialog implements IConstantes{
 		grpDomicilio.setText("Datos del curso");
 		grpDomicilio.setBounds(10, 34, 593, 123);
 		
-		Label lblDireccin = new Label(grpDomicilio, SWT.NONE);
-		lblDireccin.setText("Aula");
-		lblDireccin.setBounds(350, 63, 69, 15);
-		
-		Button btnMasAula = new Button(grpDomicilio, SWT.NONE);
-		btnMasAula.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				Integer claveAula;
-				claveAula = new Integer(-1);
-
-				DetalleAula dlg = new DetalleAula(getShell());
-				dlg.setClaveAula(claveAula.intValue());
-			
-				dlg.open();
-				txAulaViewer.refresh();
-				
-			}
-		});
-		btnMasAula.setImage(ResourceManager.getPluginImage("AcademiaRCP", "icons/mas.gif"));
-		btnMasAula.setBounds(562, 77, 21, 21);
-		
 		txAula = new CCombo(grpDomicilio, SWT.BORDER | SWT.READ_ONLY);
 		txAula.setVisibleItemCount(10);
 		txAula.setEditable(false);
@@ -406,22 +384,43 @@ public class DetalleCurso extends Dialog implements IConstantes{
 			txAulaViewer.setContentProvider(new ArrayContentProvider().getInstance());
 			txAulaViewer.setLabelProvider(new LabelProvider() {
 
-		        public String getText(Object element) {
-		            if (element instanceof Aula) {
-		            		return ((Aula)element).getDescAula();
-		            }
-		            return super.getText(element);
-		        }
-		    });
+			    public String getText(Object element) {
+			        if (element instanceof Aula) {
+			        		return ((Aula)element).getDescAula();
+			        }
+			        return super.getText(element);
+			    }
+			});
+
+			refrescarComboAula();
 			
-			AulaHome ch = new AulaHome();
-			txAulaViewer.setInput(ch.listarTodos());
 			
 		}catch (RuntimeException re){
 			re.printStackTrace();
 			GestorErrores.mensajeTexto("Error cargando lista de aulas.\n\n" + 
 		                    re.getMessage()+"\n" + re.getCause(), NIVEL_ERROR);
 		}
+
+		Label lblDireccin = new Label(grpDomicilio, SWT.NONE);
+		lblDireccin.setText("Aula");
+		lblDireccin.setBounds(350, 63, 69, 15);
+		
+		Button btnMasAula = new Button(grpDomicilio, SWT.NONE);
+		btnMasAula.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				Integer claveAula;
+				claveAula = new Integer(-1);
+
+				DetalleAula dlg = new DetalleAula(getShell());
+				dlg.setClaveAula(claveAula.intValue());
+			
+				dlg.open();
+				refrescarComboAula();
+				
+			}
+		});
+		btnMasAula.setImage(ResourceManager.getPluginImage("AcademiaRCP", "icons/mas.gif"));
+		btnMasAula.setBounds(562, 77, 21, 21);
 		
 		txMateria = new CCombo(grpDomicilio, SWT.BORDER | SWT.READ_ONLY);
 		txMateria.setVisibleItemCount(10);
@@ -441,8 +440,7 @@ public class DetalleCurso extends Dialog implements IConstantes{
 		        }
 		    });
 			
-			MateriaHome ch = new MateriaHome();
-			txMateriaViewer.setInput(ch.listarTodos());
+			refrescarComboMateria();
 			
 		}catch (RuntimeException re){
 			re.printStackTrace();
@@ -455,6 +453,19 @@ public class DetalleCurso extends Dialog implements IConstantes{
 		lblMateria.setBounds(10, 63, 69, 15);
 		
 		Button btnMasMateria = new Button(grpDomicilio, SWT.NONE);
+		btnMasMateria.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				Integer claveMateria;
+				claveMateria = new Integer(-1);
+
+				DetalleMateria dlg = new DetalleMateria(getShell());
+				dlg.setClaveMateria(claveMateria.intValue());
+			
+				dlg.open();
+				refrescarComboMateria();
+				
+			}
+		});
 		btnMasMateria.setImage(ResourceManager.getPluginImage("AcademiaRCP", "icons/mas.gif"));
 		btnMasMateria.setBounds(323, 77, 21, 21);
 		
@@ -568,35 +579,63 @@ public class DetalleCurso extends Dialog implements IConstantes{
 			}
 		};
 		
-		
-		
-		
 		TableColumn tblclmnCdigo = tvMatCodigo.getColumn();
 		tblclmnCdigo.setAlignment(SWT.RIGHT);
 		tblclmnCdigo.setWidth(50);
 		tblclmnCdigo.setText("C\u00F3digo");
 		
 		TableViewerColumn tvMatDescripcion = new TableViewerColumn(tablaMatriculas, SWT.NONE);
+		new TableViewerColumnSorter(tvMatDescripcion) {
+			protected Object getValue(Object o) {
+				// TODO remove this method, if your EditingSupport returns value
+				return ((Matricula)o).getAlumno().getNombre();
+			}
+		};
 		TableColumn tblclmnNombre = tvMatDescripcion.getColumn();
 		tblclmnNombre.setWidth(200);
 		tblclmnNombre.setText("Alumno");
 		
 		TableViewerColumn tvMatImporte = new TableViewerColumn(tablaMatriculas, SWT.NONE);
+		new TableViewerColumnSorter(tvMatImporte) {
+			protected Object getValue(Object o) {
+				// TODO remove this method, if your EditingSupport returns value
+				return ((Matricula)o).getAlumno().getTelFijo();
+			}
+		};
+		
 		TableColumn tblclmnTelefono = tvMatImporte.getColumn();
 		tblclmnTelefono.setWidth(90);
 		tblclmnTelefono.setText("Fijo");
 		
 		TableViewerColumn tableViewerColumn_9 = new TableViewerColumn(tablaMatriculas, SWT.NONE);
+		new TableViewerColumnSorter(tableViewerColumn_9) {
+			protected Object getValue(Object o) {
+				// TODO remove this method, if your EditingSupport returns value
+				return ((Matricula)o).getAlumno().getTelMovil();
+			}
+		};
 		TableColumn tblclmnMvil = tableViewerColumn_9.getColumn();
 		tblclmnMvil.setWidth(90);
 		tblclmnMvil.setText("M\u00F3vil");
 		
 		TableViewerColumn tableViewerColumn_7 = new TableViewerColumn(tablaMatriculas, SWT.NONE);
+		new TableViewerColumnSorter(tableViewerColumn_7) {
+			protected Object getValue(Object o) {
+				// TODO remove this method, if your EditingSupport returns value
+				return ((Matricula)o).getFDesde();
+			}
+		};
 		TableColumn tblclmnFDesde_1 = tableViewerColumn_7.getColumn();
 		tblclmnFDesde_1.setWidth(79);
 		tblclmnFDesde_1.setText("F. Desde");
 		
 		TableViewerColumn tableViewerColumn_8 = new TableViewerColumn(tablaMatriculas, SWT.NONE);
+		new TableViewerColumnSorter(tableViewerColumn_8) {
+			protected Object getValue(Object o) {
+				// TODO remove this method, if your EditingSupport returns value
+				return ((Matricula)o).getFHasta();
+			}
+		};
 		TableColumn tblclmnFHasta_1 = tableViewerColumn_8.getColumn();
 		tblclmnFHasta_1.setWidth(79);
 		tblclmnFHasta_1.setText("F. Hasta");
@@ -695,33 +734,69 @@ public class DetalleCurso extends Dialog implements IConstantes{
 		tbRecibos.setBounds(10, 78, 593, 281);
 		
 		TableViewerColumn tableViewerColumn = new TableViewerColumn(tablaRecibos, SWT.NONE);
+		new TableViewerColumnSorter(tableViewerColumn) {
+			protected Object getValue(Object o) {
+				// TODO remove this method, if your EditingSupport returns value
+				return ((Recibo)o).getIdRecibo();
+			}
+		};
 		TableColumn tblclmnRecibo = tableViewerColumn.getColumn();
 		tblclmnRecibo.setWidth(57);
 		tblclmnRecibo.setText("Recibo");
 		
 		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(tablaRecibos, SWT.NONE);
+		new TableViewerColumnSorter(tableViewerColumn_1) {
+			protected Object getValue(Object o) {
+				// TODO remove this method, if your EditingSupport returns value
+				return ((Recibo)o).getIdSerie();
+			}
+		};
 		TableColumn tblclmnSerie = tableViewerColumn_1.getColumn();
 		tblclmnSerie.setWidth(65);
 		tblclmnSerie.setText("Serie");
 		
 		TableViewerColumn tableViewerColumn_2 = new TableViewerColumn(tablaRecibos, SWT.NONE);
+		new TableViewerColumnSorter(tableViewerColumn_2) {
+			protected Object getValue(Object o) {
+				// TODO remove this method, if your EditingSupport returns value
+				return ((Recibo)o).getNombreCurso();
+			}
+		};
 		TableColumn tblclmnCurso = tableViewerColumn_2.getColumn();
 		tblclmnCurso.setWidth(146);
 		tblclmnCurso.setText("Curso");
 		
 		TableViewerColumn tableViewerColumn_4 = new TableViewerColumn(tablaRecibos, SWT.NONE);
+		new TableViewerColumnSorter(tableViewerColumn_4) {
+			protected Object getValue(Object o) {
+				// TODO remove this method, if your EditingSupport returns value
+				return ((Recibo)o).getFDesde();
+			}
+		};
 		TableColumn tblclmnFDesde = tableViewerColumn_4.getColumn();
 		tblclmnFDesde.setAlignment(SWT.RIGHT);
 		tblclmnFDesde.setWidth(76);
 		tblclmnFDesde.setText("F. Desde");
 		
 		TableViewerColumn tableViewerColumn_5 = new TableViewerColumn(tablaRecibos, SWT.NONE);
+		new TableViewerColumnSorter(tableViewerColumn_5) {
+			protected Object getValue(Object o) {
+				// TODO remove this method, if your EditingSupport returns value
+				return ((Recibo)o).getFHasta();
+			}
+		};
 		TableColumn tblclmnFHasta = tableViewerColumn_5.getColumn();
 		tblclmnFHasta.setAlignment(SWT.RIGHT);
 		tblclmnFHasta.setWidth(78);
 		tblclmnFHasta.setText("F. Hasta");
 		
 		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(tablaRecibos, SWT.NONE);
+		new TableViewerColumnSorter(tableViewerColumn_3) {
+			protected Object getValue(Object o) {
+				// TODO remove this method, if your EditingSupport returns value
+				return ((Recibo)o).getImpTotal();
+			}
+		};
 		TableColumn tblclmnImporte = tableViewerColumn_3.getColumn();
 		tblclmnImporte.setAlignment(SWT.RIGHT);
 		tblclmnImporte.setWidth(82);
@@ -729,6 +804,12 @@ public class DetalleCurso extends Dialog implements IConstantes{
 		
 		
 		TableViewerColumn tableViewerColumn_6 = new TableViewerColumn(tablaRecibos, SWT.NONE);
+		new TableViewerColumnSorter(tableViewerColumn_6) {
+			protected Object getValue(Object o) {
+				// TODO remove this method, if your EditingSupport returns value
+				return ((Recibo)o).getPagado();
+			}
+		};
 		TableColumn tblclmnPagado = tableViewerColumn_6.getColumn();
 		tblclmnPagado.setWidth(80);
 		tblclmnPagado.setText("Pagado");
@@ -809,6 +890,18 @@ public class DetalleCurso extends Dialog implements IConstantes{
 		
 		return area;
 	}
+
+	private void refrescarComboMateria() {
+		MateriaHome ch = new MateriaHome();
+		txMateriaViewer.setInput(ch.listarTodos());
+	}
+
+	private void refrescarComboAula() {
+		AulaHome ch = new AulaHome();
+		txAulaViewer.setInput(ch.listarTodos());
+	}
+	
+	
 /*	
 	protected void abrirNuevoCurso() {
 
