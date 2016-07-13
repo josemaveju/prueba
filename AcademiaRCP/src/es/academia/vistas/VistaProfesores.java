@@ -95,7 +95,7 @@ public class VistaProfesores extends ViewPart implements IConstantes{
 				expandBar.setBackground(SWTResourceManager.getColor(176, 196, 222));
 //				expandBar.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
 //				expandBar.setForeground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
-				{
+		 		{
 					ExpandItem xpndtmProfesores = new ExpandItem(expandBar, SWT.NONE);
 					xpndtmProfesores.setImage(ResourceManager.getPluginImage("AcademiaRCP", "icons/graduated2_24.png"));
 					xpndtmProfesores.setExpanded(true);

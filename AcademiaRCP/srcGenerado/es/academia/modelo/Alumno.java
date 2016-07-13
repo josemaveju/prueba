@@ -348,6 +348,6 @@ public class Alumno extends AbstractModelObject implements java.io.Serializable 
     	return ah.getRecibos(this);
     }
     
-	
+	 
 
 }

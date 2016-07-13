@@ -600,7 +600,7 @@ public class DetalleProfesor extends Dialog implements IConstantes{
 				// Detalle del Curso
 				abrirDetalleCurso(PANELGENERAL);
 			}
-		});
+		}); 
 		tltmVerDetalle.setToolTipText("Ver detalle de la matricula seleccionada");
 		tltmVerDetalle.setText("Ver detalle");
 		tltmVerDetalle.setImage(ResourceManager.getPluginImage("AcademiaRCP", "icons/factura_16.png"));

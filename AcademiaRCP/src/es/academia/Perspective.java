@@ -5,7 +5,7 @@ import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
 import es.academia.vistas.VistaCursos;
-
+ 
 public class Perspective implements IPerspectiveFactory {
 
 	/**

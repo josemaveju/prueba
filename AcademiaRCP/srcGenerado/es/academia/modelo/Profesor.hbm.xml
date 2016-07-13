@@ -69,7 +69,7 @@
         <set name="cursos" cascade="delete-orphan" fetch="join"> 
     		<key column="idProfesor" /> 
     		<one-to-many class="es.academia.modelo.Curso" /> 
-		</set>
+		</set> 
         
     </class>
 </hibernate-mapping>

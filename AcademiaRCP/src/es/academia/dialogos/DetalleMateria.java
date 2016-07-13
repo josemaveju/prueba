@@ -1,4 +1,4 @@
-package es.academia.dialogos;
+package es.academia.dialogos; 
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;

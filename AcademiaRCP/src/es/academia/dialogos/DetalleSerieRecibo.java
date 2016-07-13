@@ -48,7 +48,7 @@ public class DetalleSerieRecibo extends Dialog implements IConstantes{
 		      newShell.setText("Mantenimiento de series recibo");
 		   }	
 	   
-	
+	 
 	public void setClaveSerie(int clave){
 		this.claveSerie = clave;
 	}

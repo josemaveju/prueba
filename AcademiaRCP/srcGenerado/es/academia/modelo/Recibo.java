@@ -44,7 +44,7 @@ public class Recibo extends AbstractModelObject implements java.io.Serializable 
 	public Recibo(int idMatricula, int idSerie) {
 		this.idMatricula = idMatricula;
 		this.idSerie = idSerie;
-	}
+	} 
 */
 	public Recibo(int idMatricula, Serierecibo idSerie, Integer numRecibo,
 			String concepto, DateAca FGeneracion, DateAca FDesde, DateAca FHasta,

@@ -120,7 +120,7 @@ public class DatosGenRecibos {
 			Serierecibo sr = obtenerSiguienteRecibo();
 			int sigRecibo = sr.getSigRecibo();
 			Recibo rec = (Recibo) it.next();
-
+ 
 			// Asignamos valor a todos los campos variables	
 			rec.setEstadoRecibo(Recibo.ESTADOGENERADO);
 			rec.setConcepto(this.concepto);

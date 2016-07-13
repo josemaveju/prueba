@@ -28,6 +28,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import es.academia.dialogos.BuscarDlg;
 import es.academia.dialogos.DetalleAlumno;
+import es.academia.dialogos.NuevaMatriculaWizard;
 import es.academia.dialogos.SendMail;
 import es.academia.modelo.Alumno;
 import es.academia.modelo.AlumnoHome;
@@ -44,6 +45,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.wb.swt.TableViewerColumnSorter;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -202,6 +204,12 @@ public class VistaAlumnos extends ViewPart implements IConstantes{
 						}
 						{
 							CLabelAca lblMatricular = new CLabelAca(composite, SWT.NONE);
+							lblMatricular.addMouseListener(new MouseAdapter() {
+								@Override
+								public void mouseUp(MouseEvent e) {
+									abrirMatricula(PANELCURSOS);
+								}
+							});
 							lblMatricular.setImage(ResourceManager.getPluginImage("AcademiaRCP", "icons/matriculas.png"));
 							lblMatricular.setText("Matricular");
 						}
@@ -483,6 +491,33 @@ public class VistaAlumnos extends ViewPart implements IConstantes{
 		cargarListaAlumnos();
 	}
 
+	protected void abrirMatricula(String opcion) {
+
+		
+		int idxSelect;
+		if ((idxSelect = table.getSelectionIndex())== -1){
+			// Mensaje de error
+			GestorErrores.mensajeTexto("No hay nada seleccionado", NIVEL_INFO);
+			
+	       }
+		else{
+		    TableItem select = table.getItem(idxSelect);
+			Integer claveAlumno = new Integer(select.getText(0));
+			AlumnoHome ah = new AlumnoHome();
+			Alumno alumno = ah.findById(claveAlumno);
+
+			NuevaMatriculaWizard nmw = new NuevaMatriculaWizard();
+			nmw.setAlumno(alumno);
+				
+		    // Instantiates the wizard container with the wizard and opens it
+		    WizardDialog dialog = new WizardDialog(getSite().getShell(), nmw);
+		    dialog.create();
+		    dialog.open();
+
+		}
+		
+	}
+
 	protected void bajaAlumno() {
 		// TODO Auto-generated method stub
 		int idxSelect;
@@ -578,7 +613,7 @@ public class VistaAlumnos extends ViewPart implements IConstantes{
 				
 		alumnos = null;
 		BuscarDlg dlg = new BuscarDlg(getSite().getShell());
-		dlg.setTipoBusqueda(BuscarLista.BUSCAR_ALUMO);
+		dlg.setTipoBusqueda(BuscarLista.BUSCAR_ALUMNO);
 		
 		dlg.open();
 		
@@ -590,7 +625,7 @@ public class VistaAlumnos extends ViewPart implements IConstantes{
 	private void filtroRapido(){
 		
 		alumnos = null;
-		alumnos = BuscarLista.buscarNombreApellido(BuscarLista.BUSCAR_ALUMO, txFiltroRapido.getText());
+		alumnos = BuscarLista.buscarNombreApellido(BuscarLista.BUSCAR_ALUMNO, txFiltroRapido.getText());
 		
 		hacerFiltro();
 	}

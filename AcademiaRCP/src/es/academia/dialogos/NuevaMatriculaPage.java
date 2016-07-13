@@ -1,5 +1,5 @@
 package es.academia.dialogos;
-
+ 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;

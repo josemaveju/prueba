@@ -53,7 +53,7 @@ public class NuevaMatriculaWizard extends Wizard  implements IConstantes{
 			e.printStackTrace();
 			return false;
 		}
-		
+		 
 	}
 	
 	public void setCurso(Curso curso){

@@ -31,7 +31,7 @@ public class Materia implements java.io.Serializable {
 
 	public void setDescMateria(String descMateria) {
 		this.descMateria = descMateria;
-	}
+	} 
 
 	public boolean equals(Object materia){
 		if (materia != null && materia instanceof Materia)

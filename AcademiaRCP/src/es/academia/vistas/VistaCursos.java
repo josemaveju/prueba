@@ -2,7 +2,7 @@ package es.academia.vistas;
 
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
+import java.util.List; 
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.databinding.beans.BeanProperties;
@@ -556,7 +556,7 @@ public class VistaCursos extends ViewPart implements IConstantes{
 				
 		alumnos = null;
 		BuscarDlg dlg = new BuscarDlg(getSite().getShell());
-		dlg.setTipoBusqueda(BuscarLista.BUSCAR_ALUMO);
+		dlg.setTipoBusqueda(BuscarLista.BUSCAR_ALUMNO);
 		
 		dlg.open();
 		
@@ -568,7 +568,7 @@ public class VistaCursos extends ViewPart implements IConstantes{
 	private void filtroRapido(){
 		
 		alumnos = null;
-		alumnos = BuscarLista.buscarNombreApellido(BuscarLista.BUSCAR_ALUMO, txFiltroRapido.getText());
+		alumnos = BuscarLista.buscarNombreApellido(BuscarLista.BUSCAR_ALUMNO, txFiltroRapido.getText());
 		
 		hacerFiltro();
 	}

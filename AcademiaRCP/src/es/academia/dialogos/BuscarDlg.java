@@ -77,7 +77,7 @@ public class BuscarDlg extends TitleAreaDialog {
 		setTitleImage(ResourceManager.getPluginImage("AcademiaRCP", "icons/find_alumno_72.png"));
 		setMessage("Rellena los campos por los que quieres buscar y pulsa OK\r\nPuedes rellenar varios a la vez");
 
-		if (tipoBusqueda.equalsIgnoreCase(BuscarLista.BUSCAR_ALUMO))
+		if (tipoBusqueda.equalsIgnoreCase(BuscarLista.BUSCAR_ALUMNO))
 			setTitle("Buscar un alumno");
 		else if (tipoBusqueda.equalsIgnoreCase(BuscarLista.BUSCAR_PROFESOR))
 			setTitle("Buscar un profesor");

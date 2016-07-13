@@ -99,12 +99,12 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         gestionContabilidad = new OpenViewAction(window, "&Gestión contable", VistaCursos.ID, "/icons/dinero_grafico_24.png");
         register(gestionContabilidad);
         
-        gestionMaterias = new OpenViewAction(window, "&Materias", VistaCursos.ID, "/icons/libros_24.png");
-        register(gestionMaterias);
+//        gestionMaterias = new OpenViewAction(window, "&Materias", VistaMaterias.ID, "/icons/libros_24.png");
+//        register(gestionMaterias);
  
         cobrarRecibo = new OpenViewAction(window, "&Materias", VistaCursos.ID, "/icons/payment-icon_16.png");
         register(cobrarRecibo);
-        
+       
         generarRecibos = new OpenRecibosWizard (window);
         register(generarRecibos);
     

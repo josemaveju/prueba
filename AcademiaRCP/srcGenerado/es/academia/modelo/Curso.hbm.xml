@@ -46,6 +46,6 @@
     		<key column="idCurso" /> 
     		<one-to-many class="es.academia.modelo.Matricula" /> 
 		</set>
-        
+         
     </class>
 </hibernate-mapping>

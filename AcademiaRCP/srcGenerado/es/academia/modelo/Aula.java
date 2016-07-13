@@ -46,5 +46,5 @@ public class Aula extends AbstractModelObject implements java.io.Serializable {
 			return false;
 	}
 	
-
+ 
 }

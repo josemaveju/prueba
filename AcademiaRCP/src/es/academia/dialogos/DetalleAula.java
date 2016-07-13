@@ -23,7 +23,7 @@ import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.swt.widgets.Group;
-
+ 
 public class DetalleAula extends Dialog implements IConstantes{
 	private DataBindingContext m_bindingContext;
 	private Text txNumAula;

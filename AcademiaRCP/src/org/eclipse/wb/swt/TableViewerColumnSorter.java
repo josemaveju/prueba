@@ -8,7 +8,7 @@
  * Contributors:
  *    Google, Inc. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.wb.swt;
+package org.eclipse.wb.swt; 
 
 import java.lang.reflect.Method;
 

@@ -354,7 +354,7 @@ public class DetalleAlumno extends Dialog implements IConstantes{
 		
 		txFechaAlta = new DateTime(datosFijos, SWT.BORDER | SWT.DROP_DOWN);
 		txFechaAlta.setBounds(635, 57, 112, 21);
-		
+		 
 		Label lblTelfMovil2 = new Label(datosFijos, SWT.NONE);
 		lblTelfMovil2.setText("Telf. m\u00F3vil 2");
 		lblTelfMovil2.setBackground(SWTResourceManager.getColor(248, 248, 255));

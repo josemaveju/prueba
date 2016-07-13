@@ -75,4 +75,4 @@ public class GenerarRecibosPage extends WizardPage {
 		btnSloGenerar.setBounds(123, 326, 83, 16);
 		btnSloGenerar.setText("S\u00F3lo generar");
 	}
-}
+} 

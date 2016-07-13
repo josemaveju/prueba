@@ -140,7 +140,7 @@ public class SalidaRecibosPage extends WizardPage  implements IConstantes{
 		}
 		initDataBinding();
 	}
-
+ 
 	public void setListaRecibos(List listaRecibos){
 		this.listaRecibos = listaRecibos;
 	}
